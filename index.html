@@ -5,122 +5,191 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>موقع سجدة ❤️</title>
     <style>
+        /* إعدادات الخطوط والخلفية */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #1a1a2e; /* لون غامق رومانسي */
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: #fff;
             text-align: center;
             margin: 0;
             padding: 20px;
+            overflow-x: hidden;
         }
-        /* ده التصميم اللي بيفصل بين الصفحتين أو القسمين */
+
+        /* القلوب اللي بتطير في الخلفية */
+        .hearts-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .heart {
+            position: absolute; color: #e94560; font-size: 20px;
+            opacity: 0.5; animation: floatUp 8s linear infinite;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        /* تصميم المربعات (الصفحات) */
         .page-section {
-            background: #16213e;
+            background: rgba(22, 33, 62, 0.85);
             padding: 30px 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            max-width: 450px;
-            margin: 30px auto; /* ده بيعمل مسافة بين القسم الأول والتاني */
-            border: 2px solid #e94560; 
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            max-width: 500px;
+            margin: 30px auto;
+            border: 2px solid #e94560;
+            backdrop-filter: blur(5px);
         }
-        h2 { 
-            color: #e94560; 
-            margin-bottom: 20px; 
-            font-size: 28px; 
-            border-bottom: 1px dashed #e94560; 
-            padding-bottom: 10px;
+
+        h2 {
+            color: #e94560;
+            margin-bottom: 20px;
+            font-size: 28px;
+            border-bottom: 2px dashed #e94560;
+            padding-bottom: 15px;
         }
-        .highlight { 
-            font-size: 25px; 
-            color: #e94560; 
-            display: block; 
-            margin-top: 15px; 
+
+        .highlight {
+            font-size: 32px;
+            color: #ff4757;
+            display: block;
+            margin-top: 15px;
             font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
         }
-        .message-box {
-            margin-top: 25px; 
-            font-size: 18px; 
-            color: #e2e2e2; 
-            line-height: 1.6;
-            padding: 15px; 
-            border-top: 1px dashed #e94560;
+
+        /* تصميم رسالتك الحلوة */
+        .love-letter {
+            margin-top: 30px;
+            font-size: 19px;
+            color: #f1f2f6;
+            line-height: 1.8;
+            padding: 20px;
+            background: rgba(233, 69, 96, 0.1);
+            border-radius: 15px;
+            text-align: right;
+            border-right: 4px solid #e94560;
         }
+        
+        /* عداد عيد الميلاد */
+        .countdown-container {
+            display: flex; justify-content: center; gap: 15px; margin-top: 20px; direction: ltr;
+        }
+        .time-box {
+            background: #e94560; padding: 10px; border-radius: 10px; min-width: 60px;
+        }
+        .time-box span { display: block; font-size: 24px; font-weight: bold; }
+        .time-box small { font-size: 12px; color: #f1f2f6; }
+
     </style>
 </head>
 <body>
 
-    <div class="page-section">
-        <h2>Sagda's Day 🎂</h2>
-        
-        <div style="font-size: 18px; font-weight: bold;">
-            عمرك بالظبط دلوقتي:
-            <span class="highlight" id="exactAge">جاري الحساب...</span>
-        </div>
-
-        <div class="message-box" id="yearlyMessage">
-            </div>
-    </div>
+    <div class="hearts-bg" id="hearts-bg"></div>
 
     <div class="page-section">
         <h2>أيامنا الحلوة ❤️</h2>
+        <div style="font-size: 20px; font-weight: bold;">
+            عدى على ارتباطنا:
+            <span class="highlight" id="relDays">جاري الحساب...</span>
+        </div>
+    </div>
+
+    <div class="page-section">
+        <h2>Sagda's Day 🎂✨</h2>
         
-        <div style="font-size: 18px; font-weight: bold;">
-            مر على ارتباطنا:
-            <span class="highlight" id="relDays" style="font-size: 35px;">جاري الحساب...</span>
+        <div style="font-size: 20px; font-weight: bold; margin-bottom: 30px;">
+            عمرك بالظبط دلوقتي:
+            <span class="highlight" style="font-size: 26px;" id="exactAge">جاري الحساب...</span>
+        </div>
+
+        <div style="font-size: 18px; font-weight: bold; border-top: 1px dashed #e94560; padding-top: 20px;">
+            باقي على عيد ميلادك الجاي:
+            <div class="countdown-container">
+                <div class="time-box"><span id="cd-seconds">00</span><small>ثانية</small></div>
+                <div class="time-box"><span id="cd-minutes">00</span><small>دقيقة</small></div>
+                <div class="time-box"><span id="cd-hours">00</span><small>ساعة</small></div>
+                <div class="time-box"><span id="cd-days">00</span><small>يوم</small></div>
+            </div>
+        </div>
+
+        <div class="love-letter">
+            ٦ مارس ٢٠٠٧.. ده مش مجرد تاريخ عادي ده اليوم اللي اتولدت فيه روحي معاكي اليوم اللي الدنيا نورت فيه بوجود أحلى حاجة هتحصل لي في حياتي كلها.<br><br>
+            كل سنة وانتي طيبة يا سجدة قلبيي ويا نور عيني ويا أحلى باشمهندسة في الدنيا دي كلها 👷‍♀️✨. كبرتي سنة يا سجودتي بس هتفضلي طول عمرك بنتي وصاحبتي وحبيبتي اللي ماليش غيرها.<br><br>
+            أنا عارف إني كتبتلك كلام كتير قبل كده بس في عيد ميلادك بحس إن الكلام كله بيخلص قصاد غلاوتك. المسافات اللي بينا دي حتة وقت وهتخلص وبكرة نحتفل بعيد ميلادك في بيتنا وتحت سقفنا وأبص في عينيكي وأطفي معاكي الشمع وأقولك وش لوش "كل سنة وانتي كل دنيتي". طول ما إنتي في حياتي أنا حاسس إن الدنيا كلها بتضحكلي وبطمن بوجودك حتى لو بينا بلاد.<br><br>
+            ربنا يحفظك ليا ويسعد قلبك ويحققلك كل اللي بتحلمي بيه في دراستك وفي حياتك وأشوفك دايما ناجحة كده يروحي. يا رب السنة دي تكون سنة جبر الخاطر ليكي وتكون بدايتها خير وفرحة متفارقش وشك أبدا.<br><br>
+            أنا مش بس بحبك أنا بتنفسك ومكتفي بيكي عن الدنيا بحالها. كل سنة وانتي سجدة اللي خطفت قلبي كل سنة وانتي معايا وفي ضهري. بحبك حب ملوش آخر يا أغلى من روحي، ووحشتيني لدرجة متتوصفش. ❤️🎂🥳<br><br>
+            <strong>عقبال مليون سنة وانتي منورة دنيتي.. بقيتي ١٩ سنة.. قمر بيكبر قدام عيني.</strong>
         </div>
     </div>
 
     <script>
-        // المتغير بتاع النهاردة عشان نحسب بيه كل حاجة
-        const today = new Date();
+        // --- 1. عمل قلوب عشوائية في الخلفية ---
+        const bg = document.getElementById('hearts-bg');
+        for(let i=0; i<20; i++) {
+            let heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            heart.style.animationDelay = (Math.random() * 5) + 's';
+            bg.appendChild(heart);
+        }
 
-        // ==========================================
-        // 1. حساب العمر والرسالة (Sagda's Day)
-        // ==========================================
-        const birthDate = new Date("2006-02-25T00:00:00"); 
+        // --- 2. حساب أيام الارتباط (13/11/2025) ---
+        const startRel = new Date("2025-11-13T00:00:00").getTime();
         
-        let years = today.getFullYear() - birthDate.getFullYear();
-        let months = today.getMonth() - birthDate.getMonth();
-        let days = today.getDate() - birthDate.getDate();
+        // --- 3. حساب العمر (06/03/2007) ---
+        const birthDate = new Date("2007-03-06T00:00:00");
 
-        // تظبيط الأيام والشهور
-        if (days < 0) {
-            months--;
-            const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
-            days += prevMonth.getDate();
-        }
-        if (months < 0) {
-            years--;
-            months += 12;
+        // دالة بتتحدث كل ثانية عشان العدادات
+        function updateTimers() {
+            const now = new Date();
+
+            // أيام الارتباط
+            const diffRel = now.getTime() - startRel;
+            const daysRel = Math.floor(diffRel / (1000 * 3600 * 24));
+            document.getElementById("relDays").innerText = daysRel >= 0 ? daysRel + " يوم" : "لسه هنبدأ الحكاية";
+
+            // العمر بالظبط
+            let years = now.getFullYear() - birthDate.getFullYear();
+            let months = now.getMonth() - birthDate.getMonth();
+            let days = now.getDate() - birthDate.getDate();
+
+            if (days < 0) {
+                months--;
+                const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                days += prevMonth.getDate();
+            }
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+            document.getElementById("exactAge").innerText = `${years} سنة و ${months} شهر و ${days} يوم`;
+
+            // عداد عيد الميلاد الجاي
+            let nextBday = new Date(now.getFullYear(), 2, 6); // 2 يعني شهر مارس
+            if (now > nextBday) {
+                nextBday.setFullYear(now.getFullYear() + 1); // لو عيد ميلادها عدى السنة دي يحسب للسنة الجاية
+            }
+            
+            const diffBday = nextBday.getTime() - now.getTime();
+            const bDays = Math.floor(diffBday / (1000 * 60 * 60 * 24));
+            const bHours = Math.floor((diffBday % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const bMinutes = Math.floor((diffBday % (1000 * 60 * 60)) / (1000 * 60));
+            const bSeconds = Math.floor((diffBday % (1000 * 60)) / 1000);
+
+            document.getElementById("cd-days").innerText = bDays;
+            document.getElementById("cd-hours").innerText = bHours;
+            document.getElementById("cd-minutes").innerText = bMinutes;
+            document.getElementById("cd-seconds").innerText = bSeconds;
         }
 
-        // عرض العمر
-        document.getElementById("exactAge").innerText = `${years} سنة و ${months} شهر و ${days} يوم`;
-
-        // رسالة عيد الميلاد اللي بتتغير كل سنة
-        let message = "";
-        if (years === 19) {
-            message = "كل سنة وانتي طيبة يا حبيبتي، تميتي 19 سنة ومنورة دنيتي كلها! ❤️";
-        } else if (years === 20) {
-            message = "تميتي الـ 20 يا سجدة! كل سنة وانتي معايا وفي حضني يا أغلى حاجة ليا. 🎂";
-        } else {
-            message = "كل سنة وانتي طيبة يا روحي، كبرتي وبقيتي " + years + " سنة، وكل يوم بحبك أكتر! ✨";
-        }
-        document.getElementById("yearlyMessage").innerText = message;
-
-        // ==========================================
-        // 2. حساب أيام الارتباط
-        // ==========================================
-        const startRel = new Date("2025-11-13T00:00:00");
-        
-        const diffTime = today.getTime() - startRel.getTime();
-        const diffDays = Math.floor(diffTime / (1000 * 3600 * 24));
-        
-        if (diffDays >= 0) {
-            document.getElementById("relDays").innerText = diffDays + " يوم";
-        } else {
-            document.getElementById("relDays").innerText = "لسه هنبدأ الحكاية";
-        }
+        // تشغيل الدالة فوراً وبعدين كل ثانية
+        updateTimers();
+        setInterval(updateTimers, 1000);
     </script>
 
 </body>
