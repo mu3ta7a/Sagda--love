@@ -2,55 +2,124 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>سجدة</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع سجدة ❤️</title>
     <style>
-        /* شوية ستايلات تروق بيها على شكل الموقع */
-        body { font-family: Tahoma, Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #fce4ec; color: #880e4f; }
-        .counter { font-size: 24px; font-weight: bold; margin: 20px; padding: 15px; background: white; border-radius: 10px; display: inline-block; box-shadow: 0px 4px 6px rgba(0,0,0,0.1); }
-        .birthday-message { font-size: 20px; margin-top: 30px; font-weight: bold; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a2e; /* لون غامق رومانسي */
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 50px 20px;
+        }
+        .container {
+            background: #16213e;
+            padding: 40px 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            max-width: 450px;
+            margin: auto;
+            border: 2px solid #e94560; /* تحديد أحمر */
+        }
+        h1 { color: #e94560; margin-bottom: 20px; font-size: 32px; }
+        
+        .box {
+            background: #0f3460;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .highlight {
+            font-size: 35px;
+            color: #e94560;
+            display: block;
+            margin-top: 10px;
+            direction: rtl;
+        }
+        .bday-msg {
+            margin-top: 25px;
+            font-size: 18px;
+            color: #e2e2e2;
+            line-height: 1.6;
+            padding-top: 15px;
+            border-top: 1px dashed #e94560;
+        }
     </style>
 </head>
 <body>
 
-    <h1>موقع سجدة ❤️</h1>
-
-    <div class="counter">
-        مر على ارتباطنا: <span id="daysCount"></span> يوم
-    </div>
-
-    <div class="birthday-message" id="bdayMessage">
+    <div class="container">
+        <h1>سجدة ❤️</h1>
+        
+        <div class="box">
+            أيامنا الحلوة مع بعض
+            <span class="highlight" id="daysCount">0 يوم</span>
         </div>
 
+        <div class="box">
+            عمرك دلوقتي يا حبيبتي
+            <span class="highlight" id="ageCount" style="font-size: 25px;">0 سنة و 0 شهر و 0 يوم</span>
+        </div>
+
+        <div class="bday-msg" id="bdayMessage">
+            </div>
+    </div>
+
     <script>
-        // 1. حساب عدد أيام الارتباط من 13/11/2025
-        const startDate = new Date('2025-11-13T00:00:00'); 
+        // ==========================================
+        // 1. حساب أيام الارتباط من 13/11/2025
+        // ==========================================
+        const startDate = new Date("2025-11-13T00:00:00");
         const today = new Date();
-        const diffTime = Math.abs(today - startDate);
-        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); 
         
-        document.getElementById('daysCount').innerText = diffDays;
-
-        // 2. حوار عيد الميلاد (هنفترض إنها اتولدت في 2006 عشان نحسب السن)
-        // غير سنة 2006 دي لسنة ميلادها الحقيقية
-        const birthYear = 2006; 
-        const currentYear = today.getFullYear();
-        const currentAge = currentYear - birthYear;
-
-        // هنا بنحط رسالة مختلفة لكل سنة
-        let message = "";
-        if (currentAge === 19) {
-            message = "كل سنة وانتي طيبة يا حبيبتي، تميتي 19 سنة ومنورة حياتي!";
-        } else if (currentAge === 20) {
-            message = "تميتي الـ 20 يا سجدة! كل سنة وانتي معايا وفي حضني.";
-        } else if (currentAge === 21) {
-            message = "21 سنة قمر.. ربنا يخليكي ليا يا أغلى حاجة عندي.";
+        const diffTime = today.getTime() - startDate.getTime();
+        const diffDays = Math.floor(diffTime / (1000 * 3600 * 24));
+        
+        if (diffDays >= 0) {
+            document.getElementById("daysCount").innerText = diffDays + " يوم";
         } else {
-            // لو كبرت عن كده الموقع هيكتب رسالة لوحده برقم السن الجديد
-            message = "كل سنة وانتي طيبة يا روحي، كبرتي سنة وبقيتي " + currentAge + " سنة، وبحبك أكتر من السنة اللي فاتت!";
+            document.getElementById("daysCount").innerText = "لسه هنبدأ الحكاية";
         }
 
-        // لو عايز الرسالة تظهر في شهر عيد ميلادها بس، ممكن نظبطها، بس أنا سايبهالك ظاهرة علطول دلوقتي
-        document.getElementById('bdayMessage').innerText = message;
+        // ==========================================
+        // 2. حساب العمر بالظبط ورسالة عيد الميلاد
+        // ==========================================
+        // ⚠️ مهم جداً: غير التاريخ ده لتاريخ ميلاد سجدة الحقيقي (سنة-شهر-يوم)
+        const birthDate = new Date("2006-02-25T00:00:00"); 
+
+        let years = today.getFullYear() - birthDate.getFullYear();
+        let months = today.getMonth() - birthDate.getMonth();
+        let days = today.getDate() - birthDate.getDate();
+
+        // تظبيط الحسبة لو الشهر أو اليوم لسه مجاش السنة دي
+        if (days < 0) {
+            months--;
+            // بنجيب عدد أيام الشهر اللي فات عشان نظبط الأيام
+            const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+            days += prevMonth.getDate();
+        }
+        if (months < 0) {
+            years--;
+            months += 12;
+        }
+
+        // عرض العمر بالتفصيل
+        document.getElementById("ageCount").innerText = `${years} سنة و ${months} شهر و ${days} يوم`;
+
+        // رسالة عيد الميلاد على حسب السن
+        let message = "";
+        if (years === 19) {
+            message = "كل سنة وانتي طيبة يا حبيبتي، تميتي 19 سنة ومنورة دنيتي كلها! ❤️";
+        } else if (years === 20) {
+            message = "تميتي الـ 20 يا سجدة! كل سنة وانتي معايا وفي حضني يا أغلى حاجة ليا. 🎂";
+        } else {
+            message = "كل سنة وانتي طيبة يا روحي، كبرتي وبقيتي " + years + " سنة، وكل يوم بحبك أكتر من اللي قبله! ✨";
+        }
+
+        document.getElementById("bdayMessage").innerText = message;
     </script>
 
 </body>
