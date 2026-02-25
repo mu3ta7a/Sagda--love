@@ -44,13 +44,16 @@
         .lantern { font-size: 3rem; display: inline-block; animation: swing 3s infinite ease-in-out; transform-origin: top center; margin-bottom: 10px; }
         @keyframes swing { 0% { transform: rotate(15deg); } 50% { transform: rotate(-15deg); } 100% { transform: rotate(15deg); } }
         
+        .hug-animation video { width: 140px; height: 140px; object-fit: cover; border-radius: 50%; border: 3px solid #ff4d6d; box-shadow: 0 0 20px rgba(255, 77, 109, 0.4); margin-bottom: 15px; animation: pulse 3s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 20px rgba(255, 77, 109, 0.4); } 50% { box-shadow: 0 0 40px rgba(255, 77, 109, 0.8); } 100% { box-shadow: 0 0 20px rgba(255, 77, 109, 0.4); } }
+
         /* --- Counters --- */
         .countdown-grid { display: flex; justify-content: center; gap: 10px; margin-top: 20px; direction: ltr; flex-wrap: wrap; }
         .cd-box { background: rgba(255, 77, 109, 0.1); border: 1px solid rgba(255, 77, 109, 0.4); border-radius: 12px; width: 65px; height: 70px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .cd-num { font-size: 22px; font-weight: bold; color: #ff4d6d; font-family: 'Poppins'; }
         .cd-label { font-size: 10px; color: #aaa; text-transform: uppercase; font-family: 'Poppins'; }
         
-        .age-box { display: flex; justify-content: space-around; background: rgba(0,0,0,0.5); border-radius: 15px; padding: 15px; margin-bottom: 20px; border: 1px solid #333; }
+        .age-box { display: flex; justify-content: space-around; background: rgba(0,0,0,0.5); border-radius: 15px; padding: 15px; border: 1px solid #333; margin-top: 10px; }
         .age-item { text-align: center; }
         .age-val { font-size: 1.8rem; font-weight: bold; color: var(--gold); font-family: 'Poppins'; }
         .age-txt { font-size: 0.9rem; color: #888; }
@@ -114,14 +117,7 @@
             <div class="msg-container">
                 <div class="msg-card card-bday">
                     
-                    <h3 style="text-align: center; color: #fff; font-size: 1.1rem; margin-top: 0;">عمرك دلوقتي يا دنيتي ✨</h3>
-                    <div class="age-box">
-                        <div class="age-item"><div class="age-val" id="age-y">0</div><div class="age-txt">سنة</div></div>
-                        <div class="age-item"><div class="age-val" id="age-m">0</div><div class="age-txt">شهر</div></div>
-                        <div class="age-item"><div class="age-val" id="age-d">0</div><div class="age-txt">يوم</div></div>
-                    </div>
-
-                    <div id="countdown-wrapper" style="text-align: center;">
+                    <div id="countdown-wrapper" style="text-align: center; margin-bottom: 25px;">
                         <h2 style="color: #ff4d6d;">باقي كام على يومها؟ 🤔</h2>
                         <div class="countdown-grid">
                             <div class="cd-box"><span class="cd-num" id="cd-days">00</span><span class="cd-label">Days</span></div>
@@ -129,6 +125,13 @@
                             <div class="cd-box"><span class="cd-num" id="cd-mins">00</span><span class="cd-label">Mins</span></div>
                             <div class="cd-box"><span class="cd-num" id="cd-secs">00</span><span class="cd-label">Secs</span></div>
                         </div>
+                    </div>
+
+                    <h3 style="text-align: center; color: #fff; font-size: 1.1rem; margin-top: 0;">عمرك دلوقتي يا دنيتي ✨</h3>
+                    <div class="age-box">
+                        <div class="age-item"><div class="age-val" id="age-y">0</div><div class="age-txt">سنة</div></div>
+                        <div class="age-item"><div class="age-val" id="age-m">0</div><div class="age-txt">شهر</div></div>
+                        <div class="age-item"><div class="age-val" id="age-d">0</div><div class="age-txt">يوم</div></div>
                     </div>
                     
                     <div id="bday-message" style="display: none;">
@@ -147,10 +150,16 @@
         </section>
 
         <section id="s1" class="section">
-            <h1 style="font-family: 'Poppins'; color: #ff4d6d; margin-top: 10px; font-size: 2.2rem; margin-bottom: 0;">OUR DAYS 💍</h1>
+            <h1 style="font-family: 'Poppins'; color: #ff4d6d; margin-top: 10px; font-size: 2.2rem; margin-bottom: 0;">OUR DAYS</h1>
             <div class="msg-container">
                 <div class="msg-card card-love">
-                    <div style="font-size: 3rem; animation: pulse 2s infinite;">❤️</div>
+                    
+                    <div class="hug-animation" style="text-align: center;">
+                        <video autoplay loop muted playsinline>
+                            <source src="https://c.tenor.com/1GvM8wD1D5AAAAAC/tenor.mp4" type="video/mp4">
+                        </video>
+                    </div>
+
                     <h2>أيامنا الحلوة سوا</h2>
                     <p style="text-align: center; color: #fff; margin-bottom: 10px;">عدى على ارتباطنا وعلى أحلى صدفة في عمري:</p>
                     
@@ -163,8 +172,8 @@
                     
                     <p style="text-align: center; font-size: 0.95rem;">
                         من يوم ١٣ نوفمبر ٢٠٢٥ وحياتي اتغيرت بيكي.<br>
-                        كل ثانية بتمر وإنتي في حياتي هي نعمة بشكر ربنا عليها.<br>
-                        بحبك يا سجدة قلبي 🌍💍
+                        كل ثانية بتعدي وإنتي في حياتي هي نعمة بشكر ربنا عليها.<br>
+                        بحبك يا سجدة قلبي
                     </p>
                 </div>
             </div>
@@ -240,7 +249,6 @@
             for(let i=0; i<10; i++) val = val.split(arNums[i]).join(enNums[i]);
             let cleanVal = val.replace(/[^0-9]/g, '');
 
-            // Accepts 1311 or 13112025
             if(cleanVal === '1311' || cleanVal === '13112025') {
                 document.getElementById('error-msg').style.opacity = '0';
                 document.getElementById('lock-screen').style.opacity = '0';
@@ -262,7 +270,7 @@
         }
 
         // --- Navigation ---
-        const videos = document.querySelectorAll('video');
+        const videos = document.querySelectorAll('video:not(.hug-animation video)'); // Don't pause the hug loop
         function pauseAllVideos() { videos.forEach(v => v.pause()); }
 
         function nav(n) {
@@ -284,7 +292,6 @@
 
             if (days < 0) {
                 months--;
-                // Get days in previous month
                 days += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
             }
             if (months < 0) {
@@ -297,10 +304,8 @@
             document.getElementById('age-d').innerText = days;
         }
 
-        // --- Birthday Countdown Logic ---
+        // --- Timers Logic ---
         const bdayDate = new Date("March 6, 2026 00:00:00").getTime();
-        
-        // --- Relationship Counter Logic (Since Nov 13, 2025) ---
         const relDate = new Date("November 13, 2025 00:00:00").getTime();
 
         setInterval(() => {
@@ -388,13 +393,13 @@
             vidGrid.innerHTML += `<div class="media-card"><video controls playsinline preload="none" referrerpolicy="no-referrer"><source src="${url}" type="video/mp4"></video></div>`;
         });
         
-        // Ensure videos behave
+        // Ensure regular videos behave
         setTimeout(() => {
-            document.querySelectorAll('video').forEach(video => {
+            videos.forEach(video => {
                 video.addEventListener('play', () => {
                     engine.pause(); 
                     document.getElementById('play-ico').innerText = "▶";
-                    document.querySelectorAll('video').forEach(v => { if (v !== video) v.pause(); });
+                    videos.forEach(v => { if (v !== video) v.pause(); });
                 });
             });
         }, 1000);
