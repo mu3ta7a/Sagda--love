@@ -11,93 +11,81 @@
             color: #fff;
             text-align: center;
             margin: 0;
-            padding: 50px 20px;
+            padding: 20px;
         }
-        .container {
+        /* ده التصميم اللي بيفصل بين الصفحتين أو القسمين */
+        .page-section {
             background: #16213e;
-            padding: 40px 20px;
+            padding: 30px 20px;
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.5);
             max-width: 450px;
-            margin: auto;
-            border: 2px solid #e94560; /* تحديد أحمر */
+            margin: 30px auto; /* ده بيعمل مسافة بين القسم الأول والتاني */
+            border: 2px solid #e94560; 
         }
-        h1 { color: #e94560; margin-bottom: 20px; font-size: 32px; }
-        
-        .box {
-            background: #0f3460;
-            margin: 20px 0;
-            padding: 20px;
-            border-radius: 10px;
+        h2 { 
+            color: #e94560; 
+            margin-bottom: 20px; 
+            font-size: 28px; 
+            border-bottom: 1px dashed #e94560; 
+            padding-bottom: 10px;
+        }
+        .highlight { 
+            font-size: 25px; 
+            color: #e94560; 
+            display: block; 
+            margin-top: 15px; 
             font-weight: bold;
-            font-size: 18px;
         }
-        .highlight {
-            font-size: 35px;
-            color: #e94560;
-            display: block;
-            margin-top: 10px;
-            direction: rtl;
-        }
-        .bday-msg {
-            margin-top: 25px;
-            font-size: 18px;
-            color: #e2e2e2;
+        .message-box {
+            margin-top: 25px; 
+            font-size: 18px; 
+            color: #e2e2e2; 
             line-height: 1.6;
-            padding-top: 15px;
+            padding: 15px; 
             border-top: 1px dashed #e94560;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>سجدة ❤️</h1>
+    <div class="page-section">
+        <h2>Sagda's Day 🎂</h2>
         
-        <div class="box">
-            أيامنا الحلوة مع بعض
-            <span class="highlight" id="daysCount">0 يوم</span>
+        <div style="font-size: 18px; font-weight: bold;">
+            عمرك بالظبط دلوقتي:
+            <span class="highlight" id="exactAge">جاري الحساب...</span>
         </div>
 
-        <div class="box">
-            عمرك دلوقتي يا حبيبتي
-            <span class="highlight" id="ageCount" style="font-size: 25px;">0 سنة و 0 شهر و 0 يوم</span>
-        </div>
-
-        <div class="bday-msg" id="bdayMessage">
+        <div class="message-box" id="yearlyMessage">
             </div>
     </div>
 
+    <div class="page-section">
+        <h2>أيامنا الحلوة ❤️</h2>
+        
+        <div style="font-size: 18px; font-weight: bold;">
+            مر على ارتباطنا:
+            <span class="highlight" id="relDays" style="font-size: 35px;">جاري الحساب...</span>
+        </div>
+    </div>
+
     <script>
-        // ==========================================
-        // 1. حساب أيام الارتباط من 13/11/2025
-        // ==========================================
-        const startDate = new Date("2025-11-13T00:00:00");
+        // المتغير بتاع النهاردة عشان نحسب بيه كل حاجة
         const today = new Date();
-        
-        const diffTime = today.getTime() - startDate.getTime();
-        const diffDays = Math.floor(diffTime / (1000 * 3600 * 24));
-        
-        if (diffDays >= 0) {
-            document.getElementById("daysCount").innerText = diffDays + " يوم";
-        } else {
-            document.getElementById("daysCount").innerText = "لسه هنبدأ الحكاية";
-        }
 
         // ==========================================
-        // 2. حساب العمر بالظبط ورسالة عيد الميلاد
+        // 1. حساب العمر والرسالة (Sagda's Day)
         // ==========================================
-        // ⚠️ مهم جداً: غير التاريخ ده لتاريخ ميلاد سجدة الحقيقي (سنة-شهر-يوم)
         const birthDate = new Date("2006-02-25T00:00:00"); 
-
+        
         let years = today.getFullYear() - birthDate.getFullYear();
         let months = today.getMonth() - birthDate.getMonth();
         let days = today.getDate() - birthDate.getDate();
 
-        // تظبيط الحسبة لو الشهر أو اليوم لسه مجاش السنة دي
+        // تظبيط الأيام والشهور
         if (days < 0) {
             months--;
-            // بنجيب عدد أيام الشهر اللي فات عشان نظبط الأيام
             const prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
             days += prevMonth.getDate();
         }
@@ -106,20 +94,33 @@
             months += 12;
         }
 
-        // عرض العمر بالتفصيل
-        document.getElementById("ageCount").innerText = `${years} سنة و ${months} شهر و ${days} يوم`;
+        // عرض العمر
+        document.getElementById("exactAge").innerText = `${years} سنة و ${months} شهر و ${days} يوم`;
 
-        // رسالة عيد الميلاد على حسب السن
+        // رسالة عيد الميلاد اللي بتتغير كل سنة
         let message = "";
         if (years === 19) {
             message = "كل سنة وانتي طيبة يا حبيبتي، تميتي 19 سنة ومنورة دنيتي كلها! ❤️";
         } else if (years === 20) {
             message = "تميتي الـ 20 يا سجدة! كل سنة وانتي معايا وفي حضني يا أغلى حاجة ليا. 🎂";
         } else {
-            message = "كل سنة وانتي طيبة يا روحي، كبرتي وبقيتي " + years + " سنة، وكل يوم بحبك أكتر من اللي قبله! ✨";
+            message = "كل سنة وانتي طيبة يا روحي، كبرتي وبقيتي " + years + " سنة، وكل يوم بحبك أكتر! ✨";
         }
+        document.getElementById("yearlyMessage").innerText = message;
 
-        document.getElementById("bdayMessage").innerText = message;
+        // ==========================================
+        // 2. حساب أيام الارتباط
+        // ==========================================
+        const startRel = new Date("2025-11-13T00:00:00");
+        
+        const diffTime = today.getTime() - startRel.getTime();
+        const diffDays = Math.floor(diffTime / (1000 * 3600 * 24));
+        
+        if (diffDays >= 0) {
+            document.getElementById("relDays").innerText = diffDays + " يوم";
+        } else {
+            document.getElementById("relDays").innerText = "لسه هنبدأ الحكاية";
+        }
     </script>
 
 </body>
