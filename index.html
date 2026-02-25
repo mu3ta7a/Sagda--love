@@ -155,8 +155,8 @@
                 <div class="msg-card card-love">
                     
                     <div class="hug-animation" style="text-align: center;">
-                        <video autoplay loop muted playsinline>
-                            <source src="https://c.tenor.com/1GvM8wD1D5AAAAAC/tenor.mp4" type="video/mp4">
+                        <video autoplay loop muted playsinline referrerpolicy="no-referrer">
+                            <source src="https://j.top4top.io/m_37084ggly1.mp4" type="video/mp4">
                         </video>
                     </div>
 
@@ -263,16 +263,87 @@
             }
         });
 
+        // --- Core Application Initialization ---
+        let engine;
+        let allVideos;
+
         function initApp() {
+            engine = document.getElementById('audio-engine');
+            
+            // Generate Media First
+            generateMedia();
+            
+            // Now that media is in the DOM, select all playable videos (exclude hug animation)
+            allVideos = document.querySelectorAll('video:not(.hug-animation video)');
+            
+            // Attach playback control listeners
+            attachMediaListeners();
+            
+            // Start Timers
+            startTimers();
+
+            // Load first song
             load(0); 
             engine.play().catch(e => console.log(e)); 
             document.getElementById('play-ico').innerText = "⏸";
         }
 
-        // --- Navigation ---
-        const videos = document.querySelectorAll('video:not(.hug-animation video)'); // Don't pause the hug loop
-        function pauseAllVideos() { videos.forEach(v => v.pause()); }
+        // --- Media Generation ---
+        function generateMedia() {
+            const imgUrls = [
+                "https://f.top4top.io/p_36500h2ta0.jpeg", "https://g.top4top.io/p_3650eat1o1.jpeg",
+                "https://h.top4top.io/p_3650baqjo2.jpeg", "https://i.top4top.io/p_3650rprh33.jpeg",
+                "https://j.top4top.io/p_3650y4dh84.jpeg", "https://k.top4top.io/p_365077e7u5.jpeg",
+                "https://l.top4top.io/p_3650v7ql86.jpeg", "https://a.top4top.io/p_3650dj3937.jpeg"
+            ];
+            
+            const imgGrid = document.getElementById('photo-grid');
+            let imgHTML = "";
+            imgUrls.forEach((url, i) => {
+                imgHTML += `<div class="media-card" onclick="openLightbox(${i})"><img src="${url}" loading="lazy"></div>`;
+            });
+            imgGrid.innerHTML = imgHTML;
 
+            const videoUrls = [
+                "https://h.top4top.io/m_3708nxfn01.mp4", "https://i.top4top.io/m_3708aznx91.mp4", "https://j.top4top.io/m_370854m3j1.mp4",
+                "https://k.top4top.io/m_3708zwodc1.mp4", "https://l.top4top.io/m_37085629j1.mp4", "https://a.top4top.io/m_3708grk781.mp4",
+                "https://b.top4top.io/m_37082n08k1.mp4", "https://c.top4top.io/m_3708ubpgb1.mp4", "https://d.top4top.io/m_3708e70bi1.mp4",
+                "https://c.top4top.io/m_3708p7zb61.mp4", "https://e.top4top.io/m_3708v15dn1.mp4", "https://f.top4top.io/m_3708swjbt1.mp4",
+                "https://a.top4top.io/m_3708rxko81.mp4", "https://e.top4top.io/m_37080vlhr1.mp4"
+            ];
+
+            const vidGrid = document.getElementById('video-grid');
+            let vidHTML = "";
+            videoUrls.forEach(url => {
+                vidHTML += `<div class="media-card"><video controls playsinline preload="none" referrerpolicy="no-referrer"><source src="${url}" type="video/mp4"></video></div>`;
+            });
+            vidGrid.innerHTML = vidHTML;
+        }
+
+        // --- Media Playback Interlocking (Fixes the Bug) ---
+        function pauseAllVideos() {
+            if(allVideos) {
+                allVideos.forEach(v => v.pause());
+            }
+        }
+
+        function attachMediaListeners() {
+            allVideos.forEach(video => {
+                video.addEventListener('play', () => {
+                    // Pause background audio if playing
+                    if (!engine.paused) {
+                        engine.pause();
+                        document.getElementById('play-ico').innerText = "▶";
+                    }
+                    // Pause all OTHER videos
+                    allVideos.forEach(v => {
+                        if (v !== video) v.pause();
+                    });
+                });
+            });
+        }
+
+        // --- Navigation ---
         function nav(n) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('active'));
@@ -281,7 +352,7 @@
             pauseAllVideos();
         }
 
-        // --- Live Age Calculator ---
+        // --- Timers & Age Logic ---
         function updateAge() {
             const dob = new Date("March 6, 2007 00:00:00");
             const now = new Date();
@@ -304,73 +375,69 @@
             document.getElementById('age-d').innerText = days;
         }
 
-        // --- Timers Logic ---
-        const bdayDate = new Date("March 6, 2026 00:00:00").getTime();
-        const relDate = new Date("November 13, 2025 00:00:00").getTime();
+        function startTimers() {
+            const bdayDate = new Date("March 6, 2026 00:00:00").getTime();
+            const relDate = new Date("November 13, 2025 00:00:00").getTime();
 
-        setInterval(() => {
-            const now = new Date().getTime();
-            
-            // Birthday
-            const distance = bdayDate - now;
-            if (distance < 0) {
-                document.getElementById("countdown-wrapper").style.display = "none";
-                document.getElementById("bday-message").style.display = "block";
-            } else {
-                const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((distance % (1000 * 60)) / 1000);
+            setInterval(() => {
+                const now = new Date().getTime();
+                
+                // Birthday
+                const distance = bdayDate - now;
+                if (distance < 0) {
+                    document.getElementById("countdown-wrapper").style.display = "none";
+                    document.getElementById("bday-message").style.display = "block";
+                } else {
+                    const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const s = Math.floor((distance % (1000 * 60)) / 1000);
 
-                document.getElementById("cd-days").innerText = d < 10 ? '0'+d : d;
-                document.getElementById("cd-hours").innerText = h < 10 ? '0'+h : h;
-                document.getElementById("cd-mins").innerText = m < 10 ? '0'+m : m;
-                document.getElementById("cd-secs").innerText = s < 10 ? '0'+s : s;
-            }
+                    document.getElementById("cd-days").innerText = d < 10 ? '0'+d : d;
+                    document.getElementById("cd-hours").innerText = h < 10 ? '0'+h : h;
+                    document.getElementById("cd-mins").innerText = m < 10 ? '0'+m : m;
+                    document.getElementById("cd-secs").innerText = s < 10 ? '0'+s : s;
+                }
 
-            // Relationship
-            const relPassed = now - relDate;
-            if(relPassed > 0) {
-                const rd = Math.floor(relPassed / (1000 * 60 * 60 * 24));
-                const rh = Math.floor((relPassed % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const rm = Math.floor((relPassed % (1000 * 60 * 60)) / (1000 * 60));
-                const rs = Math.floor((relPassed % (1000 * 60)) / 1000);
+                // Relationship
+                const relPassed = now - relDate;
+                if(relPassed > 0) {
+                    const rd = Math.floor(relPassed / (1000 * 60 * 60 * 24));
+                    const rh = Math.floor((relPassed % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const rm = Math.floor((relPassed % (1000 * 60 * 60)) / (1000 * 60));
+                    const rs = Math.floor((relPassed % (1000 * 60)) / 1000);
 
-                document.getElementById("rel-days").innerText = rd < 10 ? '0'+rd : rd;
-                document.getElementById("rel-hours").innerText = rh < 10 ? '0'+rh : rh;
-                document.getElementById("rel-mins").innerText = rm < 10 ? '0'+rm : rm;
-                document.getElementById("rel-secs").innerText = rs < 10 ? '0'+rs : rs;
-            }
-            
-            // Age update
-            updateAge();
-        }, 1000);
+                    document.getElementById("rel-days").innerText = rd < 10 ? '0'+rd : rd;
+                    document.getElementById("rel-hours").innerText = rh < 10 ? '0'+rh : rh;
+                    document.getElementById("rel-mins").innerText = rm < 10 ? '0'+rm : rm;
+                    document.getElementById("rel-secs").innerText = rs < 10 ? '0'+rs : rs;
+                }
+                
+                updateAge();
+            }, 1000);
+        }
 
-        // --- Media Generation ---
-        const imgUrls = [
+        // --- Lightbox Functions ---
+        let currentImg = 0;
+        let isZoomed = false;
+        
+        // We redefine imgUrls here purely for Lightbox navigation logic
+        const lightboxImgUrls = [
             "https://f.top4top.io/p_36500h2ta0.jpeg", "https://g.top4top.io/p_3650eat1o1.jpeg",
             "https://h.top4top.io/p_3650baqjo2.jpeg", "https://i.top4top.io/p_3650rprh33.jpeg",
             "https://j.top4top.io/p_3650y4dh84.jpeg", "https://k.top4top.io/p_365077e7u5.jpeg",
             "https://l.top4top.io/p_3650v7ql86.jpeg", "https://a.top4top.io/p_3650dj3937.jpeg"
         ];
-        
-        let currentImg = 0;
-        let isZoomed = false;
-
-        const imgGrid = document.getElementById('photo-grid');
-        imgUrls.forEach((url, i) => {
-            imgGrid.innerHTML += `<div class="media-card" onclick="openLightbox(${i})"><img src="${url}" loading="lazy"></div>`;
-        });
 
         function openLightbox(idx) {
             currentImg = idx;
-            document.getElementById('lb-img').src = imgUrls[currentImg];
+            document.getElementById('lb-img').src = lightboxImgUrls[currentImg];
             document.getElementById('lightbox').style.display = 'flex';
             resetZoom();
         }
         function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; resetZoom(); }
-        function nextImg() { currentImg = (currentImg + 1) % imgUrls.length; document.getElementById('lb-img').src = imgUrls[currentImg]; resetZoom(); }
-        function prevImg() { currentImg = (currentImg - 1 + imgUrls.length) % imgUrls.length; document.getElementById('lb-img').src = imgUrls[currentImg]; resetZoom(); }
+        function nextImg() { currentImg = (currentImg + 1) % lightboxImgUrls.length; document.getElementById('lb-img').src = lightboxImgUrls[currentImg]; resetZoom(); }
+        function prevImg() { currentImg = (currentImg - 1 + lightboxImgUrls.length) % lightboxImgUrls.length; document.getElementById('lb-img').src = lightboxImgUrls[currentImg]; resetZoom(); }
         function toggleZoom() {
             isZoomed = !isZoomed;
             document.getElementById('lb-img').style.transform = isZoomed ? 'scale(1.8)' : 'scale(1)';
@@ -380,32 +447,8 @@
             document.getElementById('lb-img').style.transform = 'scale(1)';
         }
 
-        const videoUrls = [
-            "https://h.top4top.io/m_3708nxfn01.mp4", "https://i.top4top.io/m_3708aznx91.mp4", "https://j.top4top.io/m_370854m3j1.mp4",
-            "https://k.top4top.io/m_3708zwodc1.mp4", "https://l.top4top.io/m_37085629j1.mp4", "https://a.top4top.io/m_3708grk781.mp4",
-            "https://b.top4top.io/m_37082n08k1.mp4", "https://c.top4top.io/m_3708ubpgb1.mp4", "https://d.top4top.io/m_3708e70bi1.mp4",
-            "https://c.top4top.io/m_3708p7zb61.mp4", "https://e.top4top.io/m_3708v15dn1.mp4", "https://f.top4top.io/m_3708swjbt1.mp4",
-            "https://a.top4top.io/m_3708rxko81.mp4", "https://e.top4top.io/m_37080vlhr1.mp4"
-        ];
-
-        const vidGrid = document.getElementById('video-grid');
-        videoUrls.forEach(url => {
-            vidGrid.innerHTML += `<div class="media-card"><video controls playsinline preload="none" referrerpolicy="no-referrer"><source src="${url}" type="video/mp4"></video></div>`;
-        });
-        
-        // Ensure regular videos behave
-        setTimeout(() => {
-            videos.forEach(video => {
-                video.addEventListener('play', () => {
-                    engine.pause(); 
-                    document.getElementById('play-ico').innerText = "▶";
-                    videos.forEach(v => { if (v !== video) v.pause(); });
-                });
-            });
-        }, 1000);
-
         // --- Audio Player Logic ---
-        const tracks = [
+        const audioTracks = [
             { name: "01. Nour Einy", url: "https://g.top4top.io/m_36507j7lw0.mp3" },
             { name: "02. Hetta Meny", url: "https://e.top4top.io/m_3650c5stg0.mp3" },
             { name: "03. Hobek Hayaty", url: "https://j.top4top.io/m_3650qtyt70.mp3" },
@@ -413,40 +456,41 @@
         ];
         
         let idx = 0;
-        const engine = document.getElementById('audio-engine');
 
         function load(n) {
             idx = n;
-            engine.src = tracks[idx].url;
-            document.getElementById('cur-name').innerText = tracks[idx].name;
+            engine.src = audioTracks[idx].url;
+            document.getElementById('cur-name').innerText = audioTracks[idx].name;
             renderPlaylist();
         }
 
         function renderPlaylist() {
             let h = "";
-            tracks.forEach((t, i) => {
+            audioTracks.forEach((t, i) => {
                 let act = i === idx;
                 h += `<div style="padding:15px; background: ${act ? '#1a1a1a' : 'transparent'}; border-radius: 10px; margin-bottom: 5px; color:${act ? 'var(--gold)' : '#ccc'}; cursor:pointer;" 
                 onclick="load(${i}); engine.play(); document.getElementById('play-ico').innerText='⏸'; pauseAllVideos();">
                 ${act ? '▶' : '🎵'} ${t.name}</div>`;
             });
             document.getElementById('playlist-container').innerHTML = h;
+            
+            // Re-bind time update after elements might have refreshed
+            engine.ontimeupdate = () => {
+                let p = (engine.currentTime / engine.duration) * 100;
+                if(!isNaN(p)) document.getElementById('bar-progress').style.width = p + "%";
+                document.getElementById('time-c').innerText = fmt(engine.currentTime);
+                document.getElementById('time-d').innerText = fmt(engine.duration);
+            };
+            engine.onended = () => { next(); };
         }
 
         function toggle() {
             if(engine.paused) { pauseAllVideos(); engine.play(); document.getElementById('play-ico').innerText = "⏸"; } 
             else { engine.pause(); document.getElementById('play-ico').innerText = "▶"; }
         }
-        function next() { idx=(idx+1)%tracks.length; load(idx); toggle(); }
-        function prev() { idx=(idx-1+tracks.length)%tracks.length; load(idx); toggle(); }
+        function next() { idx=(idx+1)%audioTracks.length; load(idx); toggle(); }
+        function prev() { idx=(idx-1+audioTracks.length)%audioTracks.length; load(idx); toggle(); }
 
-        engine.ontimeupdate = () => {
-            let p = (engine.currentTime / engine.duration) * 100;
-            if(!isNaN(p)) document.getElementById('bar-progress').style.width = p + "%";
-            document.getElementById('time-c').innerText = fmt(engine.currentTime);
-            document.getElementById('time-d').innerText = fmt(engine.duration);
-        };
-        engine.onended = () => { next(); };
         function fmt(s) { if(!s || isNaN(s)) return "0:00"; let m=Math.floor(s/60), r=Math.floor(s%60); return m+":"+(r<10?"0":"")+r; }
 
         document.getElementById('bar-seek').onclick = (e) => {
