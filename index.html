@@ -78,10 +78,6 @@
         .times { display: flex; justify-content: space-between; font-size: 11px; color: #888; font-family: 'Poppins'; }
         .player-controls { display: flex; justify-content: center; align-items: center; gap: 40px; margin-top: 15px; }
         .p-main { background: var(--gold); color: #000; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; }
-
-        /* Custom YouTube Wrapper */
-        .youtube-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin-top: 20px; border: 2px solid #333; box-shadow: 0 5px 15px rgba(0,0,0,0.8); }
-        .youtube-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
     </style>
 </head>
 <body>
@@ -122,7 +118,6 @@
             <h1 style="font-family: 'Poppins'; color: #ff4d6d; margin-top: 10px; font-size: 2.2rem; margin-bottom: 0;">SAGDA'S DAY 🎂</h1>
             <div class="msg-container">
                 <div class="msg-card card-bday">
-                    
                     <div id="countdown-wrapper" style="text-align: center; margin-bottom: 25px;">
                         <h2 style="color: #ff4d6d;">باقي كام على يومها؟ 🤔</h2>
                         <div class="countdown-grid">
@@ -132,14 +127,12 @@
                             <div class="cd-box"><span class="cd-num" id="cd-secs">00</span><span class="cd-label">Secs</span></div>
                         </div>
                     </div>
-
                     <h3 style="text-align: center; color: #fff; font-size: 1.1rem; margin-top: 0;">عمرك دلوقتي يا دنيتي ✨</h3>
                     <div class="age-box">
                         <div class="age-item"><div class="age-val" id="age-y">0</div><div class="age-txt">سنة</div></div>
                         <div class="age-item"><div class="age-val" id="age-m">0</div><div class="age-txt">شهر</div></div>
                         <div class="age-item"><div class="age-val" id="age-d">0</div><div class="age-txt">يوم</div></div>
                     </div>
-                    
                     <div id="bday-message" style="display: none;">
                         <h2 style="font-size: 2rem;">كل سنة وانتي دنيتي 🎈</h2>
                         <p style="text-align: right;">
@@ -159,23 +152,19 @@
             <h1 style="font-family: 'Poppins'; color: #ff4d6d; margin-top: 10px; font-size: 2.2rem; margin-bottom: 0;">OUR DAYS</h1>
             <div class="msg-container">
                 <div class="msg-card card-love">
-                    
                     <div class="hug-animation" style="text-align: center;">
                         <video autoplay loop muted playsinline referrerpolicy="no-referrer">
                             <source src="https://j.top4top.io/m_37084ggly1.mp4" type="video/mp4">
                         </video>
                     </div>
-
                     <h2>أيامنا الحلوة سوا</h2>
                     <p style="text-align: center; color: #fff; margin-bottom: 10px;">عدى على ارتباطنا وعلى أحلى صدفة في عمري:</p>
-                    
                     <div class="countdown-grid" style="margin-bottom: 20px;">
                         <div class="cd-box"><span class="cd-num" id="rel-days">00</span><span class="cd-label">Days</span></div>
                         <div class="cd-box"><span class="cd-num" id="rel-hours">00</span><span class="cd-label">Hours</span></div>
                         <div class="cd-box"><span class="cd-num" id="rel-mins">00</span><span class="cd-label">Mins</span></div>
                         <div class="cd-box"><span class="cd-num" id="rel-secs">00</span><span class="cd-label">Secs</span></div>
                     </div>
-                    
                     <p style="text-align: center; font-size: 0.95rem;">
                         من يوم ١٣ نوفمبر ٢٠٢٥ وحياتي اتغيرت بيكي.<br>
                         كل ثانية بتعدي وإنتي في حياتي هي نعمة بشكر ربنا عليها.<br>
@@ -248,13 +237,19 @@
         <section id="s7" class="section">
             <h1 style="font-family: 'Poppins'; color: var(--gold); margin-top: 10px; font-size: 2.2rem; margin-bottom: 0;">KAZEM'S WORLD 🎻</h1>
             <div class="msg-container">
-                <div class="msg-card card-kazem" onclick="stopLocalAudioForKazem()">
+                <div class="msg-card card-kazem">
                     <h2 style="color: var(--gold); font-size: 2rem; margin-bottom: 5px;">عالم القيصر</h2>
-                    <p style="text-align: center; color: #ccc; margin-bottom: 20px; font-size: 14px;">كل أغاني كاظم اللي بتحبيها في مكان واحد عشانك يا روحي 🤎</p>
+                    <p style="text-align: center; color: #ccc; margin-bottom: 20px; font-size: 14px;">أعظم أغاني القيصر متجمعة هنا، اختاري الأغنية اللي على مزاجك واسمعيها 🤎</p>
                     
-                    <div class="youtube-wrapper">
-                        <iframe src="https://www.youtube.com/embed/videoseries?list=PLU9P6uK9N1R92I0B4O_kI1n29qV5hKx5K" title="Kadim Al Sahir Playlist" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <div style="margin-bottom: 25px;">
+                        <iframe style="border-radius:12px; box-shadow: 0 5px 15px rgba(0,0,0,0.8);" src="https://open.spotify.com/embed/playlist/37i9dQZF1DZ06evO2O09Ng?utm_source=generator&theme=0" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                     </div>
+
+                    <div>
+                        <p style="text-align: center; color: #aaa; margin-bottom: 10px; font-size: 13px;">أو اسمعيها من YouTube Music 👇</p>
+                        <iframe width="100%" height="250" src="https://www.youtube.com/embed/videoseries?list=PLU9P6uK9N1R92I0B4O_kI1n29qV5hKx5K" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.8); border: 1px solid var(--gold);"></iframe>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -351,23 +346,21 @@
             });
         }
 
-        function stopLocalAudioForKazem() {
-            if (!engine.paused) {
-                engine.pause();
-                document.getElementById('play-ico').innerText = "▶";
-            }
-            pauseAllVideos();
-        }
-
         // --- Navigation ---
         function nav(n) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('active'));
             document.getElementById('s' + n).classList.add('active');
             document.querySelectorAll('.nav-dot')[n].classList.add('active');
+            
             pauseAllVideos();
+            
+            // If going to Kazem's world, stop local Vibes music
             if(n === 7) {
-                stopLocalAudioForKazem();
+                if (!engine.paused) {
+                    engine.pause();
+                    document.getElementById('play-ico').innerText = "▶";
+                }
             }
         }
 
@@ -434,7 +427,6 @@
         // --- Lightbox Functions ---
         let currentImg = 0;
         let isZoomed = false;
-        
         const lightboxImgUrls = [
             "https://f.top4top.io/p_36500h2ta0.jpeg", "https://g.top4top.io/p_3650eat1o1.jpeg",
             "https://h.top4top.io/p_3650baqjo2.jpeg", "https://i.top4top.io/p_3650rprh33.jpeg",
@@ -469,7 +461,6 @@
         ];
         
         let idx = 0;
-
         function load(n) {
             idx = n;
             engine.src = audioTracks[idx].url;
