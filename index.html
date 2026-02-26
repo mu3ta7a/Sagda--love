@@ -71,13 +71,19 @@
         .lb-btn { background: rgba(255,255,255,0.1); color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 24px; pointer-events: auto; cursor: pointer; backdrop-filter: blur(5px); }
         .lb-close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.1); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; z-index: 20001; }
 
-        /* --- Player --- */
+        /* --- Players --- */
         .player-box { width: 100%; max-width: 450px; background: #111; border-radius: 20px; padding: 30px; border: 1px solid #333; margin-top: 20px; text-align: center; direction: ltr; }
-        .bar-bg { width: 100%; height: 6px; background: #222; border-radius: 3px; margin: 20px 0; position: relative; cursor: pointer; }
+        .bar-bg { width: 100%; height: 6px; background: #222; border-radius: 3px; margin: 20px 0; position: relative; cursor: pointer; overflow: hidden; }
         .bar-fill { height: 100%; width: 0%; background: var(--gold); border-radius: 3px; transition: width 0.1s linear; }
         .times { display: flex; justify-content: space-between; font-size: 11px; color: #888; font-family: 'Poppins'; }
         .player-controls { display: flex; justify-content: center; align-items: center; gap: 40px; margin-top: 15px; }
-        .p-main { background: var(--gold); color: #000; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; }
+        .p-main { background: var(--gold); color: #000; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; transition: 0.2s; }
+        .p-main:active { transform: scale(0.9); }
+        
+        .playlist-scroll { width: 100%; margin-top: 20px; text-align: right; max-height: 280px; overflow-y: auto; padding-right: 5px; }
+        .playlist-scroll::-webkit-scrollbar { width: 5px; }
+        .playlist-scroll::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+        .playlist-scroll::-webkit-scrollbar-track { background: #222; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -231,7 +237,7 @@
                     <div onclick="next()" style="font-size: 24px; cursor: pointer; color: #888;">⏭</div>
                 </div>
             </div>
-            <div id="playlist-container" style="width: 100%; max-width: 450px; margin-top: 20px; text-align: left; font-family: 'Poppins';"></div>
+            <div id="playlist-container" class="playlist-scroll"></div>
         </section>
 
         <section id="s7" class="section">
@@ -239,17 +245,25 @@
             <div class="msg-container">
                 <div class="msg-card card-kazem">
                     <h2 style="color: var(--gold); font-size: 2rem; margin-bottom: 5px;">عالم القيصر</h2>
-                    <p style="text-align: center; color: #ccc; margin-bottom: 20px; font-size: 14px;">أعظم أغاني القيصر متجمعة هنا، اختاري الأغنية اللي على مزاجك واسمعيها 🤎</p>
+                    <p style="text-align: center; color: #ccc; margin-bottom: 20px; font-size: 14px;">كل أغاني كاظم اللي بتحبيها في مكان واحد عشانك يا روحي 🤎</p>
                     
-                    <div style="margin-bottom: 25px;">
-                        <iframe style="border-radius:12px; box-shadow: 0 5px 15px rgba(0,0,0,0.8);" src="https://open.spotify.com/embed/playlist/37i9dQZF1DZ06evO2O09Ng?utm_source=generator&theme=0" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <div id="kz-hidden-player" style="position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;"></div>
+
+                    <div class="player-box" style="margin-top: 0; background: rgba(0,0,0,0.6); padding: 25px; border: 1px solid var(--gold);">
+                        <div id="kz-cur-name" style="color: #fff; font-size: 16px; font-weight: bold; font-family: 'Cairo'; line-height: 1.5; margin-bottom: 10px;">جاري تحميل القائمة... ⏳</div>
+                        
+                        <div class="bar-bg" id="kz-bar-seek"><div class="bar-fill" id="kz-bar-progress"></div></div>
+                        <div class="times"><span id="kz-time-c">0:00</span><span id="kz-time-d">0:00</span></div>
+                        
+                        <div class="player-controls" style="margin-top: 20px;">
+                            <div onclick="prevKz()" style="font-size: 24px; cursor: pointer; color: #888;">⏮</div>
+                            <div class="p-main" id="kz-play-ico" onclick="toggleKz()" style="width: 55px; height: 55px;">▶</div>
+                            <div onclick="nextKz()" style="font-size: 24px; cursor: pointer; color: #888;">⏭</div>
+                        </div>
                     </div>
 
-                    <div>
-                        <p style="text-align: center; color: #aaa; margin-bottom: 10px; font-size: 13px;">أو اسمعيها من YouTube Music 👇</p>
-                        <iframe width="100%" height="250" src="https://www.youtube.com/embed/videoseries?list=PLU9P6uK9N1R92I0B4O_kI1n29qV5hKx5K" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.8); border: 1px solid var(--gold);"></iframe>
-                    </div>
-
+                    <div id="kazem-playlist-container" class="playlist-scroll" style="max-height: 250px;"></div>
+                    
                 </div>
             </div>
         </section>
@@ -257,7 +271,9 @@
     </div>
 
     <script>
-        // --- Password Logic ---
+        // ==============================
+        // 1. PASSWORD LOGIC
+        // ==============================
         document.getElementById('pass-field').addEventListener('input', function() {
             let val = this.value.trim();
             const arNums = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
@@ -279,7 +295,9 @@
             }
         });
 
-        // --- Core Application Initialization ---
+        // ==============================
+        // 2. CORE INITIALIZATION
+        // ==============================
         let engine;
         let allVideos;
 
@@ -289,45 +307,34 @@
             allVideos = document.querySelectorAll('video:not(.hug-animation video)');
             attachMediaListeners();
             startTimers();
-            load(0); 
-            engine.play().catch(e => console.log(e)); 
-            document.getElementById('play-ico').innerText = "⏸";
-        }
-
-        // --- Media Generation ---
-        function generateMedia() {
-            const imgUrls = [
-                "https://f.top4top.io/p_36500h2ta0.jpeg", "https://g.top4top.io/p_3650eat1o1.jpeg",
-                "https://h.top4top.io/p_3650baqjo2.jpeg", "https://i.top4top.io/p_3650rprh33.jpeg",
-                "https://j.top4top.io/p_3650y4dh84.jpeg", "https://k.top4top.io/p_365077e7u5.jpeg",
-                "https://l.top4top.io/p_3650v7ql86.jpeg", "https://a.top4top.io/p_3650dj3937.jpeg"
-            ];
             
-            const imgGrid = document.getElementById('photo-grid');
-            let imgHTML = "";
-            imgUrls.forEach((url, i) => {
-                imgHTML += `<div class="media-card" onclick="openLightbox(${i})"><img src="${url}" loading="lazy"></div>`;
-            });
-            imgGrid.innerHTML = imgHTML;
+            // Inject YouTube Iframe API Script dynamically
+            var tag = document.createElement('script');
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-            const videoUrls = [
-                "https://h.top4top.io/m_3708nxfn01.mp4", "https://i.top4top.io/m_3708aznx91.mp4", "https://j.top4top.io/m_370854m3j1.mp4",
-                "https://k.top4top.io/m_3708zwodc1.mp4", "https://l.top4top.io/m_37085629j1.mp4", "https://a.top4top.io/m_3708grk781.mp4",
-                "https://b.top4top.io/m_37082n08k1.mp4", "https://c.top4top.io/m_3708ubpgb1.mp4", "https://d.top4top.io/m_3708e70bi1.mp4",
-                "https://c.top4top.io/m_3708p7zb61.mp4", "https://e.top4top.io/m_3708v15dn1.mp4", "https://f.top4top.io/m_3708swjbt1.mp4",
-                "https://a.top4top.io/m_3708rxko81.mp4", "https://e.top4top.io/m_37080vlhr1.mp4"
-            ];
-
-            const vidGrid = document.getElementById('video-grid');
-            let vidHTML = "";
-            videoUrls.forEach(url => {
-                vidHTML += `<div class="media-card"><video controls playsinline preload="none" referrerpolicy="no-referrer"><source src="${url}" type="video/mp4"></video></div>`;
-            });
-            vidGrid.innerHTML = vidHTML;
+            load(0); // Load local Vibes
         }
 
-        function pauseAllVideos() {
-            if(allVideos) {
+        // ==============================
+        // 3. MEDIA CONTROL (NO OVERLAP)
+        // ==============================
+        function stopEverythingElse(except) {
+            // Stop Vibes
+            if(except !== 'vibes' && engine) {
+                engine.pause();
+                document.getElementById('play-ico').innerText = "▶";
+            }
+            // Stop Kazem (YouTube)
+            if(except !== 'kazem' && isKzReady && kzPlayer && kzPlayer.getPlayerState) {
+                if(kzPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
+                    kzPlayer.pauseVideo();
+                    document.getElementById('kz-play-ico').innerText = "▶";
+                }
+            }
+            // Stop Local Videos
+            if(except !== 'video' && allVideos) {
                 allVideos.forEach(v => v.pause());
             }
         }
@@ -335,132 +342,154 @@
         function attachMediaListeners() {
             allVideos.forEach(video => {
                 video.addEventListener('play', () => {
-                    if (!engine.paused) {
-                        engine.pause();
-                        document.getElementById('play-ico').innerText = "▶";
-                    }
-                    allVideos.forEach(v => {
-                        if (v !== video) v.pause();
-                    });
+                    stopEverythingElse('video');
+                    allVideos.forEach(v => { if (v !== video) v.pause(); });
                 });
             });
         }
 
-        // --- Navigation ---
         function nav(n) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('active'));
             document.getElementById('s' + n).classList.add('active');
             document.querySelectorAll('.nav-dot')[n].classList.add('active');
-            
-            pauseAllVideos();
-            
-            // If going to Kazem's world, stop local Vibes music
-            if(n === 7) {
-                if (!engine.paused) {
-                    engine.pause();
-                    document.getElementById('play-ico').innerText = "▶";
+            if(allVideos) allVideos.forEach(v => v.pause());
+        }
+
+        // ==============================
+        // 4. HIDDEN YOUTUBE PLAYER (KAZEM)
+        // ==============================
+        let kzPlayer;
+        let isKzReady = false;
+        let currentKzIndex = 0;
+        const TOTAL_KAZEM_TRACKS = 42; // Based on the playlist you provided
+
+        function onYouTubeIframeAPIReady() {
+            kzPlayer = new YT.Player('kz-hidden-player', {
+                height: '1', width: '1',
+                playerVars: {
+                    listType: 'playlist',
+                    list: 'PLqDJODSgIKfdLmPF22ZdlMisjvU6HOW3b', // Your Kazem Playlist ID
+                    controls: 0, showinfo: 0, rel: 0, playsinline: 1, wmode: 'transparent'
+                },
+                events: {
+                    'onReady': onKzPlayerReady,
+                    'onStateChange': onKzPlayerStateChange
                 }
-            }
+            });
         }
 
-        // --- Timers & Age Logic ---
-        function updateAge() {
-            const dob = new Date("March 6, 2007 00:00:00");
-            const now = new Date();
-            let years = now.getFullYear() - dob.getFullYear();
-            let months = now.getMonth() - dob.getMonth();
-            let days = now.getDate() - dob.getDate();
-
-            if (days < 0) {
-                months--;
-                days += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
-            }
-            if (months < 0) {
-                years--;
-                months += 12;
-            }
-            document.getElementById('age-y').innerText = years;
-            document.getElementById('age-m').innerText = months;
-            document.getElementById('age-d').innerText = days;
+        function onKzPlayerReady(event) {
+            isKzReady = true;
+            document.getElementById('kz-cur-name').innerText = "اختر تراك للقيصر";
+            buildKzPlaylistUI();
         }
 
-        function startTimers() {
-            const bdayDate = new Date("March 6, 2026 00:00:00").getTime();
-            const relDate = new Date("November 13, 2025 00:00:00").getTime();
-
-            setInterval(() => {
-                const now = new Date().getTime();
+        function onKzPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                // When playing, update index, fetch real name, update UI
+                currentKzIndex = kzPlayer.getPlaylistIndex();
+                let titleData = kzPlayer.getVideoData().title;
+                let finalTitle = titleData ? titleData : `تراك القيصر رقم ${currentKzIndex + 1}`;
                 
-                const distance = bdayDate - now;
-                if (distance < 0) {
-                    document.getElementById("countdown-wrapper").style.display = "none";
-                    document.getElementById("bday-message").style.display = "block";
-                } else {
-                    const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    const s = Math.floor((distance % (1000 * 60)) / 1000);
-
-                    document.getElementById("cd-days").innerText = d < 10 ? '0'+d : d;
-                    document.getElementById("cd-hours").innerText = h < 10 ? '0'+h : h;
-                    document.getElementById("cd-mins").innerText = m < 10 ? '0'+m : m;
-                    document.getElementById("cd-secs").innerText = s < 10 ? '0'+s : s;
+                document.getElementById('kz-cur-name').innerText = finalTitle;
+                document.getElementById('kz-play-ico').innerText = "⏸";
+                
+                stopEverythingElse('kazem'); 
+                updateKzUIHighlight();
+                
+            } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+                document.getElementById('kz-play-ico').innerText = "▶";
+                if (event.data === YT.PlayerState.ENDED) {
+                    kzPlayer.nextVideo();
                 }
+            }
+        }
 
-                const relPassed = now - relDate;
-                if(relPassed > 0) {
-                    const rd = Math.floor(relPassed / (1000 * 60 * 60 * 24));
-                    const rh = Math.floor((relPassed % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const rm = Math.floor((relPassed % (1000 * 60 * 60)) / (1000 * 60));
-                    const rs = Math.floor((relPassed % (1000 * 60)) / 1000);
+        function buildKzPlaylistUI() {
+            let h = "";
+            for(let i=0; i<TOTAL_KAZEM_TRACKS; i++) {
+                h += `<div id="kz-item-${i}" style="padding:15px; background: transparent; border-radius: 10px; margin-bottom: 5px; color:#ccc; cursor:pointer; font-family: 'Cairo'; transition: 0.3s; font-size:14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                onclick="playKzAt(${i})">🎵 تراك القيصر رقم ${i+1}</div>`;
+            }
+            document.getElementById('kazem-playlist-container').innerHTML = h;
+        }
 
-                    document.getElementById("rel-days").innerText = rd < 10 ? '0'+rd : rd;
-                    document.getElementById("rel-hours").innerText = rh < 10 ? '0'+rh : rh;
-                    document.getElementById("rel-mins").innerText = rm < 10 ? '0'+rm : rm;
-                    document.getElementById("rel-secs").innerText = rs < 10 ? '0'+rs : rs;
+        function updateKzUIHighlight() {
+            for(let i=0; i<TOTAL_KAZEM_TRACKS; i++) {
+                let el = document.getElementById(`kz-item-${i}`);
+                if(el) {
+                    if(i === currentKzIndex) {
+                        el.style.background = '#1a1a1a';
+                        el.style.color = 'var(--gold)';
+                        el.style.border = '1px solid #333';
+                        let titleData = kzPlayer.getVideoData().title;
+                        el.innerText = "▶ " + (titleData ? titleData : `تراك القيصر رقم ${i+1}`);
+                    } else {
+                        el.style.background = 'transparent';
+                        el.style.color = '#ccc';
+                        el.style.border = 'none';
+                        el.innerText = `🎵 تراك القيصر رقم ${i+1}`;
+                    }
                 }
-                updateAge();
-            }, 1000);
+            }
         }
 
-        // --- Lightbox Functions ---
-        let currentImg = 0;
-        let isZoomed = false;
-        const lightboxImgUrls = [
-            "https://f.top4top.io/p_36500h2ta0.jpeg", "https://g.top4top.io/p_3650eat1o1.jpeg",
-            "https://h.top4top.io/p_3650baqjo2.jpeg", "https://i.top4top.io/p_3650rprh33.jpeg",
-            "https://j.top4top.io/p_3650y4dh84.jpeg", "https://k.top4top.io/p_365077e7u5.jpeg",
-            "https://l.top4top.io/p_3650v7ql86.jpeg", "https://a.top4top.io/p_3650dj3937.jpeg"
-        ];
-
-        function openLightbox(idx) {
-            currentImg = idx;
-            document.getElementById('lb-img').src = lightboxImgUrls[currentImg];
-            document.getElementById('lightbox').style.display = 'flex';
-            resetZoom();
-        }
-        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; resetZoom(); }
-        function nextImg() { currentImg = (currentImg + 1) % lightboxImgUrls.length; document.getElementById('lb-img').src = lightboxImgUrls[currentImg]; resetZoom(); }
-        function prevImg() { currentImg = (currentImg - 1 + lightboxImgUrls.length) % lightboxImgUrls.length; document.getElementById('lb-img').src = lightboxImgUrls[currentImg]; resetZoom(); }
-        function toggleZoom() {
-            isZoomed = !isZoomed;
-            document.getElementById('lb-img').style.transform = isZoomed ? 'scale(1.8)' : 'scale(1)';
-        }
-        function resetZoom() {
-            isZoomed = false;
-            document.getElementById('lb-img').style.transform = 'scale(1)';
+        function playKzAt(i) {
+            if(!isKzReady) return;
+            stopEverythingElse('kazem');
+            kzPlayer.playVideoAt(i);
         }
 
-        // --- Audio Player Logic ---
+        function toggleKz() {
+            if(!isKzReady) return;
+            if(kzPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
+                kzPlayer.pauseVideo();
+            } else {
+                stopEverythingElse('kazem');
+                kzPlayer.playVideo();
+            }
+        }
+
+        function nextKz() { if(isKzReady) { stopEverythingElse('kazem'); kzPlayer.nextVideo(); } }
+        function prevKz() { if(isKzReady) { stopEverythingElse('kazem'); kzPlayer.previousVideo(); } }
+
+        // Kazem Progress Bar Sync
+        setInterval(() => {
+            if(isKzReady && kzPlayer.getPlayerState) {
+                if(kzPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
+                    let curr = kzPlayer.getCurrentTime();
+                    let dur = kzPlayer.getDuration();
+                    if(dur > 0) {
+                        let p = (curr / dur) * 100;
+                        document.getElementById('kz-bar-progress').style.width = p + "%";
+                        document.getElementById('kz-time-c').innerText = fmt(curr);
+                        document.getElementById('kz-time-d').innerText = fmt(dur);
+                    }
+                }
+            }
+        }, 1000);
+
+        document.getElementById('kz-bar-seek').onclick = (e) => {
+            if(!isKzReady || kzPlayer.getPlayerState() !== YT.PlayerState.PLAYING) return;
+            let r = e.target.getBoundingClientRect();
+            let dur = kzPlayer.getDuration();
+            let seekTo = ((e.clientX - r.left) / r.width) * dur;
+            kzPlayer.seekTo(seekTo, true);
+        };
+
+
+        // ==============================
+        // 5. LOCAL AUDIO PLAYER (VIBES)
+        // ==============================
         const audioTracks = [
             { name: "01. Nour Einy", url: "https://g.top4top.io/m_36507j7lw0.mp3" },
             { name: "02. Hetta Meny", url: "https://e.top4top.io/m_3650c5stg0.mp3" },
             { name: "03. Hobek Hayaty", url: "https://j.top4top.io/m_3650qtyt70.mp3" },
             { name: "04. Farhet Sniny", url: "https://b.top4top.io/m_3650yaltj0.mp3" }
         ];
-        
         let idx = 0;
+        
         function load(n) {
             idx = n;
             engine.src = audioTracks[idx].url;
@@ -473,33 +502,97 @@
             audioTracks.forEach((t, i) => {
                 let act = i === idx;
                 h += `<div style="padding:15px; background: ${act ? '#1a1a1a' : 'transparent'}; border-radius: 10px; margin-bottom: 5px; color:${act ? 'var(--gold)' : '#ccc'}; cursor:pointer;" 
-                onclick="load(${i}); engine.play(); document.getElementById('play-ico').innerText='⏸'; pauseAllVideos();">
+                onclick="stopEverythingElse('vibes'); load(${i}); engine.play(); document.getElementById('play-ico').innerText='⏸';">
                 ${act ? '▶' : '🎵'} ${t.name}</div>`;
             });
             document.getElementById('playlist-container').innerHTML = h;
             
             engine.ontimeupdate = () => {
-                let p = (engine.currentTime / engine.duration) * 100;
-                if(!isNaN(p)) document.getElementById('bar-progress').style.width = p + "%";
-                document.getElementById('time-c').innerText = fmt(engine.currentTime);
-                document.getElementById('time-d').innerText = fmt(engine.duration);
+                if(!isNaN(engine.duration)) {
+                    document.getElementById('bar-progress').style.width = (engine.currentTime / engine.duration) * 100 + "%";
+                    document.getElementById('time-c').innerText = fmt(engine.currentTime);
+                    document.getElementById('time-d').innerText = fmt(engine.duration);
+                }
             };
             engine.onended = () => { next(); };
         }
 
         function toggle() {
-            if(engine.paused) { pauseAllVideos(); engine.play(); document.getElementById('play-ico').innerText = "⏸"; } 
+            if(engine.paused) { stopEverythingElse('vibes'); engine.play(); document.getElementById('play-ico').innerText = "⏸"; } 
             else { engine.pause(); document.getElementById('play-ico').innerText = "▶"; }
         }
-        function next() { idx=(idx+1)%audioTracks.length; load(idx); toggle(); }
-        function prev() { idx=(idx-1+audioTracks.length)%audioTracks.length; load(idx); toggle(); }
-
-        function fmt(s) { if(!s || isNaN(s)) return "0:00"; let m=Math.floor(s/60), r=Math.floor(s%60); return m+":"+(r<10?"0":"")+r; }
+        function next() { idx=(idx+1)%audioTracks.length; load(idx); stopEverythingElse('vibes'); engine.play(); document.getElementById('play-ico').innerText="⏸"; }
+        function prev() { idx=(idx-1+audioTracks.length)%audioTracks.length; load(idx); stopEverythingElse('vibes'); engine.play(); document.getElementById('play-ico').innerText="⏸"; }
 
         document.getElementById('bar-seek').onclick = (e) => {
             let r = e.target.getBoundingClientRect();
             engine.currentTime = ((e.clientX - r.left) / r.width) * engine.duration;
         };
+
+        // Utility Time Formatter
+        function fmt(s) { if(!s || isNaN(s)) return "0:00"; let m=Math.floor(s/60), r=Math.floor(s%60); return m+":"+(r<10?"0":"")+r; }
+
+        // ==============================
+        // 6. TIMERS & MEDIA INJECT
+        // ==============================
+        function updateAge() {
+            const dob = new Date("March 6, 2007 00:00:00");
+            const now = new Date();
+            let years = now.getFullYear() - dob.getFullYear();
+            let months = now.getMonth() - dob.getMonth();
+            let days = now.getDate() - dob.getDate();
+            if (days < 0) { months--; days += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
+            if (months < 0) { years--; months += 12; }
+            document.getElementById('age-y').innerText = years;
+            document.getElementById('age-m').innerText = months;
+            document.getElementById('age-d').innerText = days;
+        }
+
+        function startTimers() {
+            const bdayDate = new Date("March 6, 2026 00:00:00").getTime();
+            const relDate = new Date("November 13, 2025 00:00:00").getTime();
+            setInterval(() => {
+                const now = new Date().getTime();
+                const distance = bdayDate - now;
+                if (distance < 0) {
+                    document.getElementById("countdown-wrapper").style.display = "none";
+                    document.getElementById("bday-message").style.display = "block";
+                } else {
+                    document.getElementById("cd-days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    document.getElementById("cd-hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    document.getElementById("cd-mins").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    document.getElementById("cd-secs").innerText = Math.floor((distance % (1000 * 60)) / 1000);
+                }
+                const relPassed = now - relDate;
+                if(relPassed > 0) {
+                    document.getElementById("rel-days").innerText = Math.floor(relPassed / (1000 * 60 * 60 * 24));
+                    document.getElementById("rel-hours").innerText = Math.floor((relPassed % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    document.getElementById("rel-mins").innerText = Math.floor((relPassed % (1000 * 60 * 60)) / (1000 * 60));
+                    document.getElementById("rel-secs").innerText = Math.floor((relPassed % (1000 * 60)) / 1000);
+                }
+                updateAge();
+            }, 1000);
+        }
+
+        function generateMedia() {
+            const imgUrls = ["https://f.top4top.io/p_36500h2ta0.jpeg", "https://g.top4top.io/p_3650eat1o1.jpeg", "https://h.top4top.io/p_3650baqjo2.jpeg", "https://i.top4top.io/p_3650rprh33.jpeg", "https://j.top4top.io/p_3650y4dh84.jpeg", "https://k.top4top.io/p_365077e7u5.jpeg", "https://l.top4top.io/p_3650v7ql86.jpeg", "https://a.top4top.io/p_3650dj3937.jpeg"];
+            const imgGrid = document.getElementById('photo-grid');
+            imgUrls.forEach((url, i) => imgGrid.innerHTML += `<div class="media-card" onclick="openLightbox(${i})"><img src="${url}" loading="lazy"></div>`);
+
+            const videoUrls = ["https://h.top4top.io/m_3708nxfn01.mp4", "https://i.top4top.io/m_3708aznx91.mp4", "https://j.top4top.io/m_370854m3j1.mp4", "https://k.top4top.io/m_3708zwodc1.mp4", "https://l.top4top.io/m_37085629j1.mp4", "https://a.top4top.io/m_3708grk781.mp4", "https://b.top4top.io/m_37082n08k1.mp4", "https://c.top4top.io/m_3708ubpgb1.mp4", "https://d.top4top.io/m_3708e70bi1.mp4", "https://c.top4top.io/m_3708p7zb61.mp4", "https://e.top4top.io/m_3708v15dn1.mp4", "https://f.top4top.io/m_3708swjbt1.mp4", "https://a.top4top.io/m_3708rxko81.mp4", "https://e.top4top.io/m_37080vlhr1.mp4"];
+            const vidGrid = document.getElementById('video-grid');
+            videoUrls.forEach(url => vidGrid.innerHTML += `<div class="media-card"><video controls playsinline preload="none" referrerpolicy="no-referrer"><source src="${url}" type="video/mp4"></video></div>`);
+        }
+
+        // --- Lightbox ---
+        let currentImg = 0; let isZoomed = false;
+        const lUrls = ["https://f.top4top.io/p_36500h2ta0.jpeg", "https://g.top4top.io/p_3650eat1o1.jpeg", "https://h.top4top.io/p_3650baqjo2.jpeg", "https://i.top4top.io/p_3650rprh33.jpeg", "https://j.top4top.io/p_3650y4dh84.jpeg", "https://k.top4top.io/p_365077e7u5.jpeg", "https://l.top4top.io/p_3650v7ql86.jpeg", "https://a.top4top.io/p_3650dj3937.jpeg"];
+        function openLightbox(idx) { currentImg = idx; document.getElementById('lb-img').src = lUrls[currentImg]; document.getElementById('lightbox').style.display = 'flex'; resetZoom(); }
+        function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; resetZoom(); }
+        function nextImg() { currentImg = (currentImg + 1) % lUrls.length; document.getElementById('lb-img').src = lUrls[currentImg]; resetZoom(); }
+        function prevImg() { currentImg = (currentImg - 1 + lUrls.length) % lUrls.length; document.getElementById('lb-img').src = lUrls[currentImg]; resetZoom(); }
+        function toggleZoom() { isZoomed = !isZoomed; document.getElementById('lb-img').style.transform = isZoomed ? 'scale(1.8)' : 'scale(1)'; }
+        function resetZoom() { isZoomed = false; document.getElementById('lb-img').style.transform = 'scale(1)'; }
     </script>
 </body>
 </html>
