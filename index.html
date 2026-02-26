@@ -17,18 +17,18 @@
         .error-msg { color: #ff4d6d; font-size: 14px; margin-top: 15px; opacity: 0; transition: 0.3s; font-weight: bold; }
 
         /* --- Navigation --- */
-        .sidebar { position: fixed; right: 15px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+        .sidebar { position: fixed; right: 10px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
         .nav-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #555; cursor: pointer; transition: 0.4s; background: transparent; }
         .nav-dot.active { background: var(--gold) !important; border-color: var(--gold) !important; box-shadow: 0 0 15px rgba(212, 175, 55, 0.8); transform: scale(1.3); }
 
         /* --- Sections Logic --- */
-        .section { display: none; width: 100%; height: 100%; padding: 40px 40px 60px 20px; flex-direction: column; align-items: center; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+        .section { display: none; width: 100%; height: 100%; padding: 40px 30px 60px 15px; flex-direction: column; align-items: center; overflow-y: auto; -webkit-overflow-scrolling: touch; }
         .section.active { display: flex; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- Cards & Typography --- */
         .msg-container { width: 100%; max-width: 550px; display: flex; flex-direction: column; gap: 20px; margin-top: 15px; }
-        .msg-card { padding: 35px 30px; border-radius: 20px; text-align: right; position: relative; overflow: hidden; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .msg-card { padding: 35px 25px; border-radius: 20px; text-align: right; position: relative; overflow: hidden; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .msg-card h2 { font-family: 'Cairo'; margin-top: 0; font-size: 1.8rem; margin-bottom: 15px; font-weight: 900; }
         .msg-card p { color: #ddd; font-size: 16px; line-height: 2.2; font-family: 'Cairo'; margin: 0; font-weight: 600; }
         
@@ -39,6 +39,7 @@
         .card-ny { background: linear-gradient(145deg, #111, #000); border-color: #fff; text-align: center;}
         .card-love { background: linear-gradient(145deg, var(--love), #000); border-color: #ff4d6d; text-align: center; }
         .card-love h2 { color: #ff4d6d; }
+        .card-kazem { background: linear-gradient(145deg, #1a1a1a, #000); border-color: var(--gold); text-align: center; padding: 25px 15px; }
 
         /* --- Animations & Elements --- */
         .lantern { font-size: 3rem; display: inline-block; animation: swing 3s infinite ease-in-out; transform-origin: top center; margin-bottom: 10px; }
@@ -77,6 +78,10 @@
         .times { display: flex; justify-content: space-between; font-size: 11px; color: #888; font-family: 'Poppins'; }
         .player-controls { display: flex; justify-content: center; align-items: center; gap: 40px; margin-top: 15px; }
         .p-main { background: var(--gold); color: #000; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; }
+
+        /* Custom YouTube Wrapper */
+        .youtube-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; margin-top: 20px; border: 2px solid #333; box-shadow: 0 5px 15px rgba(0,0,0,0.8); }
+        .youtube-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
     </style>
 </head>
 <body>
@@ -98,6 +103,7 @@
         <div class="nav-dot" onclick="nav(4)" title="الصور"></div>
         <div class="nav-dot" onclick="nav(5)" title="الفيديوهات"></div>
         <div class="nav-dot" onclick="nav(6)" title="المزيكا"></div>
+        <div class="nav-dot" onclick="nav(7)" title="عالم القيصر"></div>
     </div>
 
     <div id="lightbox">
@@ -238,6 +244,21 @@
             </div>
             <div id="playlist-container" style="width: 100%; max-width: 450px; margin-top: 20px; text-align: left; font-family: 'Poppins';"></div>
         </section>
+
+        <section id="s7" class="section">
+            <h1 style="font-family: 'Poppins'; color: var(--gold); margin-top: 10px; font-size: 2.2rem; margin-bottom: 0;">KAZEM'S WORLD 🎻</h1>
+            <div class="msg-container">
+                <div class="msg-card card-kazem" onclick="stopLocalAudioForKazem()">
+                    <h2 style="color: var(--gold); font-size: 2rem; margin-bottom: 5px;">عالم القيصر</h2>
+                    <p style="text-align: center; color: #ccc; margin-bottom: 20px; font-size: 14px;">كل أغاني كاظم اللي بتحبيها في مكان واحد عشانك يا روحي 🤎</p>
+                    
+                    <div class="youtube-wrapper">
+                        <iframe src="https://www.youtube.com/embed/videoseries?list=PLU9P6uK9N1R92I0B4O_kI1n29qV5hKx5K" title="Kadim Al Sahir Playlist" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </div>
 
     <script>
@@ -269,20 +290,10 @@
 
         function initApp() {
             engine = document.getElementById('audio-engine');
-            
-            // Generate Media First
             generateMedia();
-            
-            // Now that media is in the DOM, select all playable videos (exclude hug animation)
             allVideos = document.querySelectorAll('video:not(.hug-animation video)');
-            
-            // Attach playback control listeners
             attachMediaListeners();
-            
-            // Start Timers
             startTimers();
-
-            // Load first song
             load(0); 
             engine.play().catch(e => console.log(e)); 
             document.getElementById('play-ico').innerText = "⏸";
@@ -320,7 +331,6 @@
             vidGrid.innerHTML = vidHTML;
         }
 
-        // --- Media Playback Interlocking (Fixes the Bug) ---
         function pauseAllVideos() {
             if(allVideos) {
                 allVideos.forEach(v => v.pause());
@@ -330,17 +340,23 @@
         function attachMediaListeners() {
             allVideos.forEach(video => {
                 video.addEventListener('play', () => {
-                    // Pause background audio if playing
                     if (!engine.paused) {
                         engine.pause();
                         document.getElementById('play-ico').innerText = "▶";
                     }
-                    // Pause all OTHER videos
                     allVideos.forEach(v => {
                         if (v !== video) v.pause();
                     });
                 });
             });
+        }
+
+        function stopLocalAudioForKazem() {
+            if (!engine.paused) {
+                engine.pause();
+                document.getElementById('play-ico').innerText = "▶";
+            }
+            pauseAllVideos();
         }
 
         // --- Navigation ---
@@ -350,13 +366,15 @@
             document.getElementById('s' + n).classList.add('active');
             document.querySelectorAll('.nav-dot')[n].classList.add('active');
             pauseAllVideos();
+            if(n === 7) {
+                stopLocalAudioForKazem();
+            }
         }
 
         // --- Timers & Age Logic ---
         function updateAge() {
             const dob = new Date("March 6, 2007 00:00:00");
             const now = new Date();
-            
             let years = now.getFullYear() - dob.getFullYear();
             let months = now.getMonth() - dob.getMonth();
             let days = now.getDate() - dob.getDate();
@@ -369,7 +387,6 @@
                 years--;
                 months += 12;
             }
-
             document.getElementById('age-y').innerText = years;
             document.getElementById('age-m').innerText = months;
             document.getElementById('age-d').innerText = days;
@@ -382,7 +399,6 @@
             setInterval(() => {
                 const now = new Date().getTime();
                 
-                // Birthday
                 const distance = bdayDate - now;
                 if (distance < 0) {
                     document.getElementById("countdown-wrapper").style.display = "none";
@@ -399,7 +415,6 @@
                     document.getElementById("cd-secs").innerText = s < 10 ? '0'+s : s;
                 }
 
-                // Relationship
                 const relPassed = now - relDate;
                 if(relPassed > 0) {
                     const rd = Math.floor(relPassed / (1000 * 60 * 60 * 24));
@@ -412,7 +427,6 @@
                     document.getElementById("rel-mins").innerText = rm < 10 ? '0'+rm : rm;
                     document.getElementById("rel-secs").innerText = rs < 10 ? '0'+rs : rs;
                 }
-                
                 updateAge();
             }, 1000);
         }
@@ -421,7 +435,6 @@
         let currentImg = 0;
         let isZoomed = false;
         
-        // We redefine imgUrls here purely for Lightbox navigation logic
         const lightboxImgUrls = [
             "https://f.top4top.io/p_36500h2ta0.jpeg", "https://g.top4top.io/p_3650eat1o1.jpeg",
             "https://h.top4top.io/p_3650baqjo2.jpeg", "https://i.top4top.io/p_3650rprh33.jpeg",
@@ -474,7 +487,6 @@
             });
             document.getElementById('playlist-container').innerHTML = h;
             
-            // Re-bind time update after elements might have refreshed
             engine.ontimeupdate = () => {
                 let p = (engine.currentTime / engine.duration) * 100;
                 if(!isNaN(p)) document.getElementById('bar-progress').style.width = p + "%";
