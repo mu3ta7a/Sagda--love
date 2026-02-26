@@ -80,10 +80,14 @@
         .p-main { background: var(--gold); color: #000; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; cursor: pointer; transition: 0.2s; }
         .p-main:active { transform: scale(0.9); }
         
+        /* Playlist Scrollbar */
         .playlist-scroll { width: 100%; margin-top: 20px; text-align: right; max-height: 280px; overflow-y: auto; padding-right: 5px; }
         .playlist-scroll::-webkit-scrollbar { width: 5px; }
         .playlist-scroll::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
         .playlist-scroll::-webkit-scrollbar-track { background: #222; border-radius: 10px; }
+
+        /* Visible YouTube Frame Style */
+        .yt-visible-container { width: 100%; max-width: 450px; margin-top: 15px; border-radius: 15px; overflow: hidden; border: 2px solid var(--gold); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2); }
     </style>
 </head>
 <body>
@@ -246,11 +250,9 @@
                 <div class="msg-card card-kazem">
                     <h2 style="color: var(--gold); font-size: 2rem; margin-bottom: 5px;">عالم القيصر</h2>
                     <p style="text-align: center; color: #ccc; margin-bottom: 20px; font-size: 14px;">كل أغاني كاظم اللي بتحبيها في مكان واحد عشانك يا روحي 🤎</p>
-                    
-                    <div id="kz-hidden-player" style="position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;"></div>
 
-                    <div class="player-box" style="margin-top: 0; background: rgba(0,0,0,0.6); padding: 25px; border: 1px solid var(--gold);">
-                        <div id="kz-cur-name" style="color: #fff; font-size: 16px; font-weight: bold; font-family: 'Cairo'; line-height: 1.5; margin-bottom: 10px;">جاري تحميل القائمة... ⏳</div>
+                    <div class="player-box" style="margin-top: 0; background: rgba(0,0,0,0.6); padding: 25px; border: 1px solid var(--gold); border-bottom: none; border-radius: 20px 20px 0 0;">
+                        <div id="kz-cur-name" style="color: #fff; font-size: 16px; font-weight: bold; font-family: 'Cairo'; line-height: 1.5; margin-bottom: 10px;">جاري سحب الأغاني... ⏳</div>
                         
                         <div class="bar-bg" id="kz-bar-seek"><div class="bar-fill" id="kz-bar-progress"></div></div>
                         <div class="times"><span id="kz-time-c">0:00</span><span id="kz-time-d">0:00</span></div>
@@ -262,7 +264,11 @@
                         </div>
                     </div>
 
-                    <div id="kazem-playlist-container" class="playlist-scroll" style="max-height: 250px;"></div>
+                    <div class="yt-visible-container" style="border-radius: 0 0 20px 20px; margin-top: 0; border-top: none;">
+                        <div id="kz-visible-player"></div>
+                    </div>
+
+                    <div id="kazem-playlist-container" class="playlist-scroll" style="max-height: 250px; margin-top: 25px;"></div>
                     
                 </div>
             </div>
@@ -308,7 +314,7 @@
             attachMediaListeners();
             startTimers();
             
-            // Inject YouTube Iframe API Script dynamically
+            // سحب سكريبت يوتيوب
             var tag = document.createElement('script');
             tag.src = "https://www.youtube.com/iframe_api";
             var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -321,19 +327,16 @@
         // 3. MEDIA CONTROL (NO OVERLAP)
         // ==============================
         function stopEverythingElse(except) {
-            // Stop Vibes
             if(except !== 'vibes' && engine) {
                 engine.pause();
                 document.getElementById('play-ico').innerText = "▶";
             }
-            // Stop Kazem (YouTube)
             if(except !== 'kazem' && isKzReady && kzPlayer && kzPlayer.getPlayerState) {
                 if(kzPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
                     kzPlayer.pauseVideo();
                     document.getElementById('kz-play-ico').innerText = "▶";
                 }
             }
-            // Stop Local Videos
             if(except !== 'video' && allVideos) {
                 allVideos.forEach(v => v.pause());
             }
@@ -353,24 +356,24 @@
             document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('active'));
             document.getElementById('s' + n).classList.add('active');
             document.querySelectorAll('.nav-dot')[n].classList.add('active');
-            if(allVideos) allVideos.forEach(v => v.pause());
+            if(allVideos) allVideos.forEach(v => v.pause()); // قفل الفيديوهات عند التقليب
         }
 
         // ==============================
-        // 4. HIDDEN YOUTUBE PLAYER (KAZEM)
+        // 4. VISIBLE YOUTUBE PLAYER (KAZEM)
         // ==============================
         let kzPlayer;
         let isKzReady = false;
         let currentKzIndex = 0;
-        const TOTAL_KAZEM_TRACKS = 42; // Based on the playlist you provided
+        const TOTAL_KAZEM_TRACKS = 42; 
 
         function onYouTubeIframeAPIReady() {
-            kzPlayer = new YT.Player('kz-hidden-player', {
-                height: '1', width: '1',
+            kzPlayer = new YT.Player('kz-visible-player', {
+                height: '250', width: '100%',
                 playerVars: {
                     listType: 'playlist',
-                    list: 'PLqDJODSgIKfdLmPF22ZdlMisjvU6HOW3b', // Your Kazem Playlist ID
-                    controls: 0, showinfo: 0, rel: 0, playsinline: 1, wmode: 'transparent'
+                    list: 'PLqDJODSgIKfdLmPF22ZdlMisjvU6HOW3b', // ID قايمة كاظم
+                    controls: 1, showinfo: 0, rel: 0, playsinline: 1, wmode: 'transparent'
                 },
                 events: {
                     'onReady': onKzPlayerReady,
@@ -381,13 +384,12 @@
 
         function onKzPlayerReady(event) {
             isKzReady = true;
-            document.getElementById('kz-cur-name').innerText = "اختر تراك للقيصر";
+            document.getElementById('kz-cur-name').innerText = "اختر تراك للقيصر أو شغله من الفيديو";
             buildKzPlaylistUI();
         }
 
         function onKzPlayerStateChange(event) {
             if (event.data === YT.PlayerState.PLAYING) {
-                // When playing, update index, fetch real name, update UI
                 currentKzIndex = kzPlayer.getPlaylistIndex();
                 let titleData = kzPlayer.getVideoData().title;
                 let finalTitle = titleData ? titleData : `تراك القيصر رقم ${currentKzIndex + 1}`;
@@ -454,7 +456,7 @@
         function nextKz() { if(isKzReady) { stopEverythingElse('kazem'); kzPlayer.nextVideo(); } }
         function prevKz() { if(isKzReady) { stopEverythingElse('kazem'); kzPlayer.previousVideo(); } }
 
-        // Kazem Progress Bar Sync
+        // شريط الوقت
         setInterval(() => {
             if(isKzReady && kzPlayer.getPlayerState) {
                 if(kzPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
@@ -529,7 +531,6 @@
             engine.currentTime = ((e.clientX - r.left) / r.width) * engine.duration;
         };
 
-        // Utility Time Formatter
         function fmt(s) { if(!s || isNaN(s)) return "0:00"; let m=Math.floor(s/60), r=Math.floor(s%60); return m+":"+(r<10?"0":"")+r; }
 
         // ==============================
