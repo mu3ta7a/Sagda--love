@@ -60,19 +60,17 @@
         .age-val { font-size: 1.8rem; font-weight: bold; color: var(--gold); font-family: 'Poppins'; }
         .age-txt { font-size: 0.9rem; color: #888; }
 
-        /* --- Instagram Style Grid (Vault) --- */
+        /* --- Instagram Style Grid (Vault Photos) --- */
         .ig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; width: 100%; max-width: 500px; margin-top: 15px; }
         .ig-grid .media-card { background: #111; overflow: hidden; cursor: pointer; position: relative; }
         .ig-grid .media-card img { width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 1/1; }
-        
-        .ig-feed { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 500px; margin-top: 20px; }
-        .ig-feed video { width: 100%; border-radius: 10px; border: 1px solid #333; background: #0a0a0a; object-fit: cover; }
 
         /* --- Reels (Videos) --- */
         .reels-container { width: 100%; max-width: 400px; height: 75vh; overflow-y: scroll; scroll-snap-type: y mandatory; border-radius: 20px; border: 2px solid #333; background: #000; margin-top: 10px; }
         .reels-container::-webkit-scrollbar { display: none; }
-        .reel-item { scroll-snap-align: start; width: 100%; height: 100%; position: relative; background: #000; display: flex; justify-content: center; align-items: center; }
-        .reel-item video { width: 100%; height: 100%; object-fit: cover; background: #111; }
+        /* scroll-snap-stop: always بيجبره يقف على فيديو واحد ميسحبش كذا واحد مع بعض */
+        .reel-item { scroll-snap-align: start; scroll-snap-stop: always; width: 100%; height: 100%; position: relative; background: #000; display: flex; justify-content: center; align-items: center; }
+        .reel-item video { width: 100%; height: 100%; object-fit: cover; background: #111; border-radius: 18px; }
 
         /* --- Lightbox --- */
         #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 20000; display: none; flex-direction: column; justify-content: center; align-items: center; }
@@ -92,7 +90,6 @@
         .bar-fill { height: 100%; width: 0%; background: var(--gold); border-radius: 3px; transition: width 0.1s linear; }
         .times { display: flex; justify-content: space-between; font-size: 11px; color: #888; font-family: 'Poppins'; }
         
-        /* Fixed Audio Controls */
         .player-controls { display: flex; justify-content: center; align-items: center; gap: 40px; margin-top: 15px; }
         .ctrl-btn { cursor: pointer; display: flex; justify-content: center; align-items: center; padding: 10px; }
         .p-main { background: var(--gold); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: 0.2s; }
@@ -103,11 +100,13 @@
 </head>
 <body>
 
+    <!-- Loader -->
     <div id="loader">
         <div class="heart-beat">🤍</div>
         <div class="loader-text" id="loader-msg"></div>
     </div>
 
+    <!-- Lock Screen -->
     <div id="lock-screen">
         <h2 style="font-family: 'Poppins'; color: var(--gold); letter-spacing: 3px; margin-bottom: 5px; font-size: 2rem;">SAGDA'S ZONE</h2>
         <p style="color: #666; font-size: 13px; margin-top: 0;">⛔ للجميلات فقط.. ممنوع دخول أي حد غيرها</p>
@@ -117,6 +116,7 @@
 
     <audio id="audio-engine"></audio>
 
+    <!-- Sidebar / Bottom Bar -->
     <div class="sidebar">
         <div class="nav-dot active" onclick="nav(0)" title="عيد الميلاد"></div>
         <div class="nav-dot" onclick="nav(1)" title="أيامنا الحلوة"></div>
@@ -127,6 +127,7 @@
         <div class="nav-dot" onclick="nav(6)" title="مزاجنا"></div>
     </div>
 
+    <!-- Lightbox -->
     <div id="lightbox">
         <button class="lb-close" onclick="closeLightbox()">✖</button>
         <img id="lb-img" src="">
@@ -138,6 +139,7 @@
 
     <div style="width: 100%; height: 100%;">
         
+        <!-- S0: Birthday -->
         <section id="s0" class="section active">
             <h1 style="font-family: 'Poppins'; color: #ff4d6d; margin-top: 10px; font-size: 2.2rem; margin-bottom: 0;">SAGDA'S DAY 🎂</h1>
             <div class="msg-container">
@@ -169,6 +171,7 @@
             </div>
         </section>
 
+        <!-- S1: Our Days -->
         <section id="s1" class="section">
             <h1 style="font-family: 'Poppins'; color: #ff4d6d; margin-top: 10px; font-size: 2.2rem; margin-bottom: 0;">OUR DAYS</h1>
             <div class="msg-container">
@@ -191,6 +194,7 @@
             </div>
         </section>
 
+        <!-- S2: Ramadan -->
         <section id="s2" class="section">
             <h1 style="font-family: 'Poppins'; color: var(--gold); margin-top: 10px; font-size: 2.2rem; margin-bottom: 0;">RAMADAN</h1>
             <div class="msg-container">
@@ -207,6 +211,7 @@
             </div>
         </section>
 
+        <!-- S3: New Year -->
         <section id="s3" class="section">
             <h1 id="ny-title" style="font-family: 'Poppins'; color: #fff; margin-top: 10px; font-size: 2.2rem; margin-bottom: 0;">NEW YEAR</h1>
             <div class="msg-container">
@@ -222,30 +227,37 @@
             </div>
         </section>
 
+        <!-- S4: The Vault (Instagram Grid Style) -->
         <section id="s4" class="section">
             <h2 id="vault-title" onclick="unlockVault()" style="font-size: 3rem; margin-bottom: 5px; cursor: pointer; user-select: none; transition: 0.3s;">🌙</h2>
             
+            <!-- Public Decoy Grid (1 image) -->
             <div id="public-grid" class="ig-grid" style="grid-template-columns: 1fr; max-width: 350px;"></div>
 
+            <!-- Secret Password Field -->
             <div id="vault-secret" style="display: none; text-align: center; margin-top: 20px;">
                 <p style="color: #ff4d6d; font-size: 14px; font-weight: bold;">الباسورد هو عمر حكايتنا بالساعات والدقايق.. دلوقتي بالظبط ⏳</p>
                 <input type="number" id="vault-pass" class="pass-input" placeholder="****" style="width: 150px; font-size: 24px; letter-spacing: 5px;">
             </div>
 
+            <!-- Private Images and Videos (Lazy Loaded) -->
             <div id="private-content" style="display: none; width: 100%; max-width: 500px;">
                 <h3 style="color: #ff4d6d; text-align: right; width: 100%; padding-bottom: 5px;">صورنا الحلوة ❤️</h3>
                 <div id="private-img-grid" class="ig-grid"></div>
                 
                 <h3 style="color: #ff4d6d; text-align: right; width: 100%; padding-bottom: 5px; margin-top: 30px;">فيديوهاتنا 🎬</h3>
-                <div id="private-vid-grid" class="ig-feed"></div>
+                <!-- Private videos will be loaded here as Reels -->
+                <div id="private-vid-grid" class="reels-container" style="height: 60vh;"></div>
             </div>
         </section>
 
+        <!-- S5: Reels (Love Videos) -->
         <section id="s5" class="section">
             <h2 style="font-size: 2.5rem; margin-bottom: 5px;">🎥</h2>
             <div class="reels-container" id="reels-grid"></div>
         </section>
 
+        <!-- S6: Vibes (Audio) -->
         <section id="s6" class="section">
             <h1 style="font-family: 'Poppins'; color: var(--gold); margin-top: 10px; font-size: 2.5rem; margin-bottom: 0;">🎧</h1>
             <div class="player-box">
@@ -273,7 +285,7 @@
     </div>
 
     <script>
-        // --- Random Loader Text & Initial Setup ---
+        // --- Random Loader Text ---
         const loaderMsgs = [
             "جاري تحميل العظمة.. اعملي نفسك متفاجئة بقى 😂",
             "ثانية واحدة بنكنس الموقع ونرش مية عشان الضيوف الحلوة 🧹💦",
@@ -295,7 +307,7 @@
             if(val === '1311' || val === '13112025') {
                 let err = document.getElementById('error-msg');
                 err.style.color = '#00ff00';
-                err.innerText = 'نورتي مجرتك يا قمر 🌙❤️'; 
+                err.innerText = 'الباسورد صح.. بس إنتي اللي صح الصح 😉❤️'; 
                 err.style.opacity = '1';
                 setTimeout(() => {
                     document.getElementById('lock-screen').style.opacity = '0';
@@ -309,9 +321,8 @@
         });
 
         // --- Data Arrays ---
-        // 1. All Private Images (The decoy IMG_7995 is the first one at index 0)
         const imgList = [
-            "https://raw.githubusercontent.com/mu3ta7a/sagda-media-/refs/heads/main/IMG_7995.jpeg", // Decoy image included inside vault
+            "https://raw.githubusercontent.com/mu3ta7a/sagda-media-/refs/heads/main/IMG_7995.jpeg", // Decoy image
             "https://raw.githubusercontent.com/mu3ta7a/sagda-media-/refs/heads/main/IMG_8007.jpeg",
             "https://raw.githubusercontent.com/mu3ta7a/sagda-media-/refs/heads/main/IMG_8033.jpeg",
             "https://raw.githubusercontent.com/mu3ta7a/sagda-media-/refs/heads/main/IMG_8034.jpeg",
@@ -345,7 +356,6 @@
             "https://raw.githubusercontent.com/mu3ta7a/sagda-media-/refs/heads/main/acfaaf9e-bdcf-4a77-a117-c86ed69480f1.jpeg"
         ];
 
-        // 2. Private Videos (Mustafa & Sagda)
         const privateVidList = [
             "https://github.com/mu3ta7a/sagda-media-/raw/refs/heads/main/IMG_8039.mp4",
             "https://github.com/mu3ta7a/sagda-media-/raw/refs/heads/main/IMG_8038.mp4",
@@ -358,7 +368,6 @@
             "https://github.com/mu3ta7a/sagda-media-/raw/refs/heads/main/3B17682C-64EB-4A5F-924E-EDF9EE51AA23%202.mp4"
         ];
 
-        // 3. Reels (Love Videos)
         const reelsVidList = [
             "https://github.com/mu3ta7a/VIBES/raw/refs/heads/main/snapvideo--%23gonewiththwwind%20%23masterpiece.90s%20%23news%20%23music%20-9903.mp4",
             "https://github.com/mu3ta7a/VIBES/raw/refs/heads/main/snapvideo--%D9%81%D8%A7%D9%87%D9%85%D9%87%20%D8%AD%D8%B1%D9%88%D9%81%D9%8A%20%D9%88%20%D8%A7%D9%84%D8%B3%D9%83%D8%A7%D8%AA%20%23beforesunset%20%23fyp%20%23foryou%20%23viral%20%23%D8%A7%D9%83%D8%B3%D8%A8%D9%84%D9%88%D8%B1%20-1583.mp4",
@@ -408,23 +417,41 @@
             loadAudio(0);
         }
 
+        // دالة سحرية: أي فيديو يشتغل توقف كل الفيديوهات التانية والأغاني كمان
+        function attachVideoListeners() {
+            document.querySelectorAll('video').forEach(vid => {
+                vid.onplay = function() {
+                    document.querySelectorAll('video').forEach(otherVid => {
+                        if (otherVid !== this) {
+                            otherVid.pause();
+                        }
+                    });
+                    stopAudio(); // توقف الأغنية اللي في مزاجنا
+                };
+            });
+        }
+
         function generatePublicMedia() {
-            // 1. Render Only the Single Decoy Image (Index 0 in imgList)
             let pubGrid = document.getElementById('public-grid');
             pubGrid.innerHTML = `<div class="media-card" onclick="openLightbox(0)"><img src="${imgList[0]}" loading="lazy"></div>`;
 
-            // 2. Build Reels (Love Videos)
             let reels = document.getElementById('reels-grid');
             let reelsHtml = '';
             reelsVidList.forEach((u, idx) => {
                 let pre = idx === 0 ? "metadata" : "none"; 
-                reelsHtml += `<div class="reel-item"><video controls playsinline preload="${pre}" onplay="stopAudio()"><source src="${u}"></video></div>`;
+                reelsHtml += `<div class="reel-item"><video controls playsinline preload="${pre}"><source src="${u}"></video></div>`;
             });
             reels.innerHTML = reelsHtml;
             allReels = document.querySelectorAll('.reel-item video');
             
+            attachVideoListeners(); // نشغل المراقبة على الفيديوهات
+
             let observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => { if (entry.isIntersecting) { stopAudio(); } else { entry.target.pause(); } });
+                entries.forEach(entry => { 
+                    if (!entry.isIntersecting) { 
+                        entry.target.pause(); 
+                    } 
+                });
             }, { threshold: 0.7 });
             allReels.forEach(v => observer.observe(v));
         }
@@ -451,22 +478,24 @@
                 // Hide Decoy
                 document.getElementById('public-grid').style.display = 'none';
 
-                // Instagram Style Photos (All images including decoy)
+                // Instagram Style Photos
                 let pImgHtml = '';
                 for(let i = 0; i < imgList.length; i++) {
                     pImgHtml += `<div class="media-card" onclick="openLightbox(${i})"><img src="${imgList[i]}" loading="lazy"></div>`;
                 }
                 document.getElementById('private-img-grid').innerHTML = pImgHtml;
 
-                // Instagram Feed Videos
+                // فيديوهاتنا معمولة Reels برضه عشان تتسحب فيديو بفيديو
                 let pVidHtml = '';
                 privateVidList.forEach(vid => {
-                    pVidHtml += `<video controls playsinline preload="none" onplay="stopAudio()"><source src="${vid}"></video>`;
+                    pVidHtml += `<div class="reel-item"><video controls playsinline preload="none"><source src="${vid}"></video></div>`;
                 });
                 document.getElementById('private-vid-grid').innerHTML = pVidHtml;
 
                 document.getElementById('private-content').style.display = 'flex';
                 document.getElementById('private-content').style.flexDirection = 'column';
+
+                attachVideoListeners(); // نشغل المراقبة على الفيديوهات الجديدة بتاعتكم
             }
         });
 
@@ -476,8 +505,7 @@
             curImg = idx; 
             document.getElementById('lb-img').src = imgList[curImg]; 
             document.getElementById('lightbox').style.display = 'flex'; 
-            if(allReels) allReels.forEach(v => v.pause()); 
-            document.querySelectorAll('#private-vid-grid video').forEach(v => v.pause());
+            document.querySelectorAll('video').forEach(v => v.pause()); // وقف أي فيديو لو فتح صورة
         }
         function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
         function nextImg() { curImg = (curImg + 1) % imgList.length; document.getElementById('lb-img').src = imgList[curImg]; }
@@ -489,8 +517,11 @@
             document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('active'));
             document.getElementById('s' + n).classList.add('active');
             document.querySelectorAll('.nav-dot')[n].classList.add('active');
-            if(n !== 5 && allReels) allReels.forEach(v => v.pause());
-            if(n !== 4) document.querySelectorAll('#private-vid-grid video').forEach(v => v.pause());
+            
+            // لما نطلع من أي قسم نوقف الفيديوهات اللي شغالة فيه
+            if(n !== 5 && n !== 4) {
+                document.querySelectorAll('video').forEach(v => v.pause());
+            }
         }
 
         // --- Timers Logic ---
@@ -546,7 +577,7 @@
             audioTracks.forEach((t, i) => {
                 let act = i === aIdx;
                 h += `<div style="padding:15px; background: ${act ? '#1a1a1a' : 'transparent'}; border-radius: 10px; margin-bottom: 5px; color:${act ? 'var(--gold)' : '#ccc'}; cursor:pointer; font-family:'Poppins';" 
-                onclick="if(allReels)allReels.forEach(v=>v.pause()); document.querySelectorAll('#private-vid-grid video').forEach(v=>v.pause()); loadAudio(${i}); engine.play(); syncAudioUI(true);">
+                onclick="document.querySelectorAll('video').forEach(v=>v.pause()); loadAudio(${i}); engine.play(); syncAudioUI(true);">
                 ${act ? '▶' : '🎵'} Track ${romanNum[i]}</div>`;
             });
             document.getElementById('playlist-container').innerHTML = h;
@@ -565,9 +596,18 @@
             document.getElementById('icon-pause').style.display = isPlaying ? 'block' : 'none';
             isPlaying ? document.getElementById('vinyl').classList.add('spin') : document.getElementById('vinyl').classList.remove('spin'); 
         }
-        function toggle() { if(engine.paused) { if(allReels)allReels.forEach(v=>v.pause()); document.querySelectorAll('#private-vid-grid video').forEach(v=>v.pause()); engine.play(); syncAudioUI(true); } else { engine.pause(); syncAudioUI(false); } }
-        function next() { aIdx=(aIdx+1)%audioTracks.length; loadAudio(aIdx); if(allReels)allReels.forEach(v=>v.pause()); engine.play(); syncAudioUI(true); }
-        function prev() { aIdx=(aIdx-1+audioTracks.length)%audioTracks.length; loadAudio(aIdx); if(allReels)allReels.forEach(v=>v.pause()); engine.play(); syncAudioUI(true); }
+        function toggle() { 
+            if(engine.paused) { 
+                document.querySelectorAll('video').forEach(v=>v.pause()); 
+                engine.play(); 
+                syncAudioUI(true); 
+            } else { 
+                engine.pause(); 
+                syncAudioUI(false); 
+            } 
+        }
+        function next() { aIdx=(aIdx+1)%audioTracks.length; loadAudio(aIdx); document.querySelectorAll('video').forEach(v=>v.pause()); engine.play(); syncAudioUI(true); }
+        function prev() { aIdx=(aIdx-1+audioTracks.length)%audioTracks.length; loadAudio(aIdx); document.querySelectorAll('video').forEach(v=>v.pause()); engine.play(); syncAudioUI(true); }
         document.getElementById('bar-seek').onclick = (e) => { let r = e.target.getBoundingClientRect(); engine.currentTime = ((e.clientX - r.left) / r.width) * engine.duration; };
         function fmt(s) { if(!s || isNaN(s)) return "0:00"; let m=Math.floor(s/60), r=Math.floor(s%60); return m+":"+(r<10?"0":"")+r; }
     </script>
