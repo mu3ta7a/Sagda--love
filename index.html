@@ -93,6 +93,49 @@
         .p-main:active { transform: scale(0.95); }
         
         .playlist-scroll { width: 100%; max-width: 450px; margin-top: 20px; text-align: right; max-height: 250px; overflow-y: auto; padding-right: 5px; }
+
+        @keyframes lanternSwing {
+            0%, 100% { transform: rotate(-15deg); filter: drop-shadow(0 0 5px var(--gold)); }
+            50% { transform: rotate(15deg); filter: drop-shadow(0 0 25px var(--gold)) drop-shadow(0 0 45px #ffaa00); }
+        }
+        .lantern-anim {
+            display: inline-block;
+            transform-origin: top center;
+            animation: lanternSwing 3s ease-in-out infinite;
+            font-size: 3.5rem;
+        }
+
+        #s4 { position: relative; }
+        .moon-container { display: flex; justify-content: center; align-items: center; margin-top: 20px; margin-bottom: 10px; z-index: 2; }
+        .pro-moon { font-size: 4.5rem; cursor: pointer; user-select: none; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3)); }
+        .pro-moon.tap-1 { filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.6)); transform: scale(1.15); }
+        .pro-moon.tap-2 { filter: drop-shadow(0 0 45px rgba(212, 175, 55, 0.9)); transform: scale(1.3); }
+        .pro-moon.tap-3 { filter: drop-shadow(0 0 60px rgba(255, 255, 255, 1)); transform: scale(1.4); pointer-events: none; }
+        
+        .stars-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; transition: opacity 0.8s ease; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle infinite alternate; }
+        @keyframes twinkle { 0% { opacity: 0.1; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1.5); box-shadow: 0 0 8px white; } }
+        @keyframes revealVault { from { opacity: 0; transform: translateY(40px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        /* حركة الكاسين اللي بتتحول لـ 🥂 وتثبت */
+        .cheers-wrapper { position: relative; height: 70px; display: flex; justify-content: center; align-items: center; font-size: 3.5rem; margin-bottom: 20px; }
+        .split-glasses { position: absolute; display: flex; gap: 5px; animation: hideSplit 0.1s 1.5s forwards; }
+        .glass-left { display: inline-block; animation: clinkL 1.5s ease-in forwards; transform-origin: bottom right; }
+        .glass-right { display: inline-block; animation: clinkR 1.5s ease-in forwards; transform-origin: bottom left; }
+        .merged-glass { position: absolute; opacity: 0; transform: scale(0.5); animation: popMerged 0.4s 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; filter: drop-shadow(0 0 20px var(--gold)); }
+
+        @keyframes clinkL {
+            0% { transform: translateX(-35px) rotate(-30deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateX(8px) rotate(15deg); }
+        }
+        @keyframes clinkR {
+            0% { transform: translateX(35px) rotate(30deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateX(-8px) rotate(-15deg); }
+        }
+        @keyframes hideSplit { to { opacity: 0; visibility: hidden; } }
+        @keyframes popMerged { to { opacity: 1; transform: scale(1.1); } }
     </style>
 </head>
 <body>
@@ -193,7 +236,7 @@
             <h1 style="font-family: 'Poppins'; color: var(--gold); margin-top: 10px; font-size: 2.2rem; margin-bottom: 0;">RAMADAN</h1>
             <div class="msg-container">
                 <div class="msg-card card-ramadan">
-                    <div style="font-size: 3rem; margin-bottom: 10px;">🏮</div>
+                    <div style="margin-bottom: 15px;"><span class="lantern-anim">🏮</span></div>
                     <h2>رمضانك جنة يا روح قلبي 🌙</h2>
                     <p>
                         حبيبتي وبنتي وصحبتي ونور عيني يا سجودتي ✨<br>
@@ -209,10 +252,16 @@
             <h1 id="ny-title" style="font-family: 'Poppins'; color: #fff; margin-top: 10px; font-size: 2.2rem; margin-bottom: 0;">NEW YEAR</h1>
             <div class="msg-container">
                 <div class="msg-card card-ny">
-                    <div style="font-size: 2.5rem; text-align: center; margin-bottom: 10px;">🎆 🥂 ❄️</div>
-                    <h2>بداية جديدة معاكي ❤️</h2>
+                    <div class="cheers-wrapper">
+                        <div class="split-glasses">
+                            <span class="glass-left">🍷</span>
+                            <span class="glass-right">🍷</span>
+                        </div>
+                        <div class="merged-glass">🥂</div>
+                    </div>
+                    <h2>بداية <span id="dyn-year-title" style="color: var(--gold);"></span> معاكي ❤️</h2>
                     <p style="text-align: right;">
-                        "كل الناس بتحتفل بالسنة الجديدة بس أنا بحتفل إنك لسه معايا فيها.. أنتي أحلى حاجة حصلت لي في السنين اللي فاتت وأجمل أمل في السنين اللي جاية."<br><br>
+                        "كل الناس بتحتفل بسنة <span id="dyn-year-text" style="color: var(--gold); font-weight: bold;"></span> الجديدة بس أنا بحتفل إنك لسه معايا فيها.. أنتي أحلى حاجة حصلت لي في السنين اللي فاتت وأجمل أمل في السنين اللي جاية."<br><br>
                         انتهت سنة كنتي أنتي فيها السند والفرحة وبدأت سنة جديدة مش عايز فيها غيرك.. بحبك ❤️<br><br>
                         يا رب السنة دي تكون سنة خير وجبر خاطر ليكي يا أحلى <span style="color: var(--gold);">باشمهندسة 👷‍♀️✨</span>
                     </p>
@@ -221,16 +270,18 @@
         </section>
 
         <section id="s4" class="section">
-            <h2 id="vault-title" onclick="unlockVault()" style="font-size: 3rem; margin-bottom: 5px; cursor: pointer; user-select: none; transition: 0.3s;">🌙</h2>
+            <div class="moon-container">
+                <h2 id="vault-title" class="pro-moon" onclick="unlockVault()">🌙</h2>
+            </div>
             
-            <div id="public-grid" class="ig-grid" style="grid-template-columns: 1fr; max-width: 260px; margin: 0 auto;"></div>
+            <div id="public-grid" class="ig-grid" style="grid-template-columns: 1fr; max-width: 260px; margin: 0 auto; z-index: 2;"></div>
 
-            <div id="vault-secret" style="display: none; text-align: center; margin-top: 25px;">
+            <div id="vault-secret" style="display: none; text-align: center; margin-top: 25px; z-index: 2;">
                 <p id="vault-hint" style="color: #ff4d6d; font-size: 14px; font-weight: bold; margin-bottom: 5px;">الباسورد هو عمر حكايتنا بالساعات والدقايق.. دلوقتي بالظبط ⏳</p>
                 <input type="number" id="vault-pass" class="pass-input" placeholder="****" style="letter-spacing: 5px;">
             </div>
 
-            <div id="private-content" style="display: none; width: 100%; max-width: 500px;">
+            <div id="private-content" style="display: none; width: 100%; max-width: 500px; z-index: 2;">
                 <h3 style="color: #ff4d6d; text-align: right; width: 100%; padding-bottom: 5px;">صورنا الحلوة ❤️</h3>
                 <div id="private-img-grid"></div>
                 
@@ -402,13 +453,41 @@
         let odAudio = document.getElementById('our-days-audio');
         let allReels = [];
 
+        function createStars() {
+            let starsBg = document.createElement('div');
+            starsBg.className = 'stars-bg';
+            for(let i=0; i<40; i++) {
+                let s = document.createElement('div');
+                s.className = 'star';
+                s.style.width = s.style.height = (Math.random() * 3 + 1) + 'px';
+                s.style.left = Math.random() * 100 + '%';
+                s.style.top = Math.random() * 100 + '%';
+                s.style.animationDuration = (Math.random() * 3 + 1) + 's';
+                starsBg.appendChild(s);
+            }
+            document.getElementById('s4').appendChild(starsBg);
+        }
+
         function initApp() {
             const now = new Date();
-            document.getElementById('ny-title').innerText = "NEW YEAR " + now.getFullYear();
-            let ageInYears = now.getFullYear() - 2007;
-            document.getElementById('dynamic-age-text').innerHTML = `عقبال مليون سنة وانتي منورة دنيتي<br>بقيتي ${ageInYears} سنة.. قمر بيكبر قدام عيني`;
+            let currentYear = now.getFullYear();
+            
+            // Updating Year dynamically
+            document.getElementById('ny-title').innerText = "NEW YEAR " + currentYear;
+            document.getElementById('dyn-year-title').innerText = currentYear;
+            document.getElementById('dyn-year-text').innerText = currentYear;
+            
+            // Getting exact age (updated strictly on birthdays)
+            const dob = new Date("March 6, 2007 00:00:00");
+            let exactAge = currentYear - dob.getFullYear();
+            if(now.getMonth() < dob.getMonth() || (now.getMonth() === dob.getMonth() && now.getDate() < dob.getDate())) {
+                exactAge--;
+            }
+            document.getElementById('dynamic-age-text').innerHTML = `عقبال مليون سنة وانتي منورة دنيتي<br>بقيتي ${exactAge} سنة.. قمر بيكبر قدام عيني`;
+            
             startTimers();
             generatePublicMedia(); 
+            createStars();
             loadAudio(0);
         }
 
@@ -456,9 +535,23 @@
         function unlockVault() {
             if(vaultUnlocked) return;
             vaultClicks++;
+            let moon = document.getElementById('vault-title');
+            
+            moon.classList.remove('tap-1', 'tap-2', 'tap-3');
+            moon.classList.add('tap-' + vaultClicks);
+
+            if(vaultClicks === 1) moon.innerText = '🌓';
+            if(vaultClicks === 2) moon.innerText = '🌔';
+
             if(vaultClicks === 3) {
-                document.getElementById('vault-secret').style.display = 'block';
-                document.getElementById('vault-title').style.cursor = 'default';
+                moon.innerText = '🌕';
+                document.querySelector('.stars-bg').style.opacity = '0';
+                
+                setTimeout(() => {
+                    let sec = document.getElementById('vault-secret');
+                    sec.style.display = 'block';
+                    sec.style.animation = 'revealVault 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                }, 400);
             }
         }
         
@@ -488,8 +581,10 @@
                     });
                     document.getElementById('private-vid-grid').innerHTML = pVidHtml;
 
-                    document.getElementById('private-content').style.display = 'flex';
-                    document.getElementById('private-content').style.flexDirection = 'column';
+                    let privContent = document.getElementById('private-content');
+                    privContent.style.display = 'flex';
+                    privContent.style.flexDirection = 'column';
+                    privContent.style.animation = 'revealVault 0.8s ease';
 
                     attachVideoListeners(); 
                     applyTikTokScroll(document.querySelectorAll('#private-vid-grid video'));
