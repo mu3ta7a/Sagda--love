@@ -45,7 +45,7 @@
         .msg-card h2 { font-family: 'Cairo'; margin-top: 0; font-size: 1.8rem; margin-bottom: 15px; font-weight: 900; }
         .msg-card p { color: #ddd; font-size: 16px; line-height: 2.2; font-family: 'Cairo'; margin: 0; font-weight: 600; }
         .card-bday { background: linear-gradient(145deg, var(--bday), #000); border-color: #ff4d6d; }
-        .card-ramadan { background: linear-gradient(145deg, var(--ramadan), #000); border-color: #gold; text-align: center; }
+        .card-ramadan { background: linear-gradient(145deg, var(--ramadan), #000); border-color: var(--gold); text-align: center; }
         .card-ny { background: linear-gradient(145deg, #111, #000); border-color: #fff; text-align: center;}
         .card-love { background: linear-gradient(145deg, var(--love), #000); border-color: #ff4d6d; text-align: center; }
 
@@ -59,32 +59,11 @@
         .age-val { font-size: 1.8rem; font-weight: bold; color: var(--gold); font-family: 'Poppins'; }
         .age-txt { font-size: 0.9rem; color: #888; }
 
-        /* Carousel Style - Fixed for iPhone look */
-        #private-img-grid { 
-            display: flex; 
-            overflow-x: auto; 
-            scroll-snap-type: x mandatory; 
-            gap: 20px; 
-            padding: 20px calc(50% - 125px); /* Centers the 250px card */
-            width: 100%; 
-            align-items: center; 
-            scrollbar-width: none; 
-            -webkit-overflow-scrolling: touch;
-        }
+        /* Carousel Style for Vault */
+        #private-img-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 15px; padding: 20px calc(50% - 110px); width: 100%; align-items: center; scrollbar-width: none; }
         #private-img-grid::-webkit-scrollbar { display: none; }
-        .media-card { 
-            min-width: 250px; 
-            height: 250px; 
-            border-radius: 50%; 
-            scroll-snap-align: center; 
-            overflow: hidden; 
-            cursor: pointer; 
-            border: 5px solid var(--gold); 
-            flex-shrink: 0; 
-            transition: transform 0.3s;
-        }
+        .media-card { min-width: 200px; height: 200px; border-radius: 50%; scroll-snap-align: center; overflow: hidden; cursor: pointer; border: 3px solid var(--gold); flex-shrink: 0; }
         .media-card img { width: 100%; height: 100%; object-fit: cover; }
-        .media-card:active { transform: scale(0.95); }
 
         .reels-container { width: 100%; max-width: 500px; height: 85vh; overflow-y: scroll; scroll-snap-type: y mandatory; border-radius: 20px; border: 2px solid #333; background: #000; margin-top: 10px; }
         .reels-container::-webkit-scrollbar { display: none; }
@@ -613,7 +592,7 @@
         function next() { aIdx=(aIdx+1)%audioTracks.length; loadAudio(aIdx); document.querySelectorAll('video').forEach(v=>v.pause()); engine.play(); syncAudioUI(true); }
         function prev() { aIdx=(aIdx-1+audioTracks.length)%audioTracks.length; loadAudio(aIdx); document.querySelectorAll('video').forEach(v=>v.pause()); engine.play(); syncAudioUI(true); }
         document.getElementById('bar-seek').onclick = (e) => { let r = e.currentTarget.getBoundingClientRect(); engine.currentTime = ((e.clientX - r.left) / r.width) * engine.duration; };
-        function fmt(s) { if(!s || isNaN(s)) return "0:00"; let m=Math.floor(s/60), r=Math.floor(s/60); return m+":"+(r<10?"0":"")+r; }
+        function fmt(s) { if(!s || isNaN(s)) return "0:00"; let m=Math.floor(s/60), r=Math.floor(s%60); return m+":"+(r<10?"0":"")+r; }
     </script>
 </body>
 </html>
