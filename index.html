@@ -501,11 +501,12 @@
             curImg = idx; 
             document.getElementById('lb-img').src = imgList[curImg]; 
             document.getElementById('lightbox').style.display = 'flex'; 
+            document.querySelector('.lb-controls').style.display = vaultUnlocked ? 'flex' : 'none';
             document.querySelectorAll('video').forEach(v => v.pause());
         }
         function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
-        function nextImg() { curImg = (curImg + 1) % imgList.length; document.getElementById('lb-img').src = imgList[curImg]; }
-        function prevImg() { curImg = (curImg - 1 + imgList.length) % imgList.length; document.getElementById('lb-img').src = imgList[curImg]; }
+        function nextImg() { if(!vaultUnlocked) return; curImg = (curImg + 1) % imgList.length; document.getElementById('lb-img').src = imgList[curImg]; }
+        function prevImg() { if(!vaultUnlocked) return; curImg = (curImg - 1 + imgList.length) % imgList.length; document.getElementById('lb-img').src = imgList[curImg]; }
 
         function nav(n) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
