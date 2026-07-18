@@ -60,10 +60,11 @@
         .age-txt { font-size: 0.9rem; color: #888; }
 
         /* Carousel Style for Vault */
-        #private-img-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 15px; padding: 20px calc(50% - 110px); width: 100%; align-items: center; scrollbar-width: none; }
+        #private-img-grid { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 15px; padding: 20px 0; width: 100%; -webkit-overflow-scrolling: touch; align-items: center; }
         #private-img-grid::-webkit-scrollbar { display: none; }
-        .media-card { min-width: 200px; height: 200px; border-radius: 50%; scroll-snap-align: center; overflow: hidden; cursor: pointer; border: 3px solid var(--gold); flex-shrink: 0; }
+        .media-card { min-width: 200px; height: 200px; border-radius: 50%; scroll-snap-align: center; overflow: hidden; cursor: pointer; border: 3px solid var(--gold); transition: 0.3s; }
         .media-card img { width: 100%; height: 100%; object-fit: cover; }
+        .media-card:hover { transform: scale(1.1); box-shadow: 0 0 20px var(--gold); }
 
         .reels-container { width: 100%; max-width: 500px; height: 85vh; overflow-y: scroll; scroll-snap-type: y mandatory; border-radius: 20px; border: 2px solid #333; background: #000; margin-top: 10px; }
         .reels-container::-webkit-scrollbar { display: none; }
@@ -277,7 +278,11 @@
             document.title = document.hidden ? "وحشتيني يا سجدة 🥺" : originalTitle;
         });
 
-        const loaderMsgs = ["جاري تحميل العظمة.. اعملي نفسك متفاجئة بقى 😂", "ثانية واحدة بنكنس الموقع ونرش مية عشان الضيوف الحلوة 🧹💦", "اصبري على رزقك يا سجدة.. الموقع بيجمع أهو ⏳"];
+        const loaderMsgs = [
+            "جاري تحميل العظمة.. اعملي نفسك متفاجئة بقى 😂",
+            "ثانية واحدة بنكنس الموقع ونرش مية عشان الضيوف الحلوة 🧹💦",
+            "اصبري على رزقك يا سجدة.. الموقع بيجمع أهو ⏳"
+        ];
         document.getElementById('loader-msg').innerText = loaderMsgs[Math.floor(Math.random() * loaderMsgs.length)];
 
         setTimeout(() => {
@@ -428,7 +433,7 @@
 
         function generatePublicMedia() {
             let pubGrid = document.getElementById('public-grid');
-            pubGrid.innerHTML = `<div class="media-card" onclick="openLightbox(0)"><img src="${imgList[0]}" loading="lazy"></div>`;
+            pubGrid.innerHTML = `<div class="media-card" onclick="openLightbox(0)" style="border-radius:50%"><img src="${imgList[0]}" loading="lazy"></div>`;
             let reels = document.getElementById('reels-grid');
             let reelsHtml = '';
             reelsVidList.forEach((u, idx) => {
