@@ -133,6 +133,9 @@
         }
         @keyframes hideSplit { to { opacity: 0; visibility: hidden; } }
         @keyframes popMerged { to { opacity: 1; transform: scale(1.1); } }
+
+        #mother-popup { position: fixed; inset: 0; background: #000; z-index: 30000; display: none; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: 0.8s ease; }
+        .mother-txt { color: var(--gold); font-family: 'Cairo'; font-size: 1.8rem; font-weight: 900; animation: pulseTxt 1.5s infinite; text-align: center; padding: 0 15px; }
     </style>
 </head>
 <body>
@@ -149,8 +152,14 @@
         <div id="error-msg" class="error-msg">مش عارفة التاريخ؟! أخص عليكي 😂💔</div>
     </div>
 
+    <div id="mother-popup">
+        <div class="mother-txt">نورتي مكان سجدة يا ست الكل</div>
+    </div>
+
+    <audio id="mother-audio" preload="none"><source src="https://raw.githubusercontent.com/mu3ta7a/VIBES/refs/heads/main/Converted.mp3" type="audio/mpeg"></audio>
+
     <audio id="audio-engine"></audio>
-    <audio id="our-days-audio" loop preload="none"><source src="https://raw.githubusercontent.com/mu3ta7a/VIBES/refs/heads/main/Converted.mp3" type="audio/mpeg"></audio>
+    <audio id="our-days-audio" loop preload="none"><source src="https://raw.githubusercontent.com/mu3ta7a/VIBES/refs/heads/main/OUR%20DAYS.mp3" type="audio/mpeg"></audio>
 
     <div class="sidebar">
         <div class="nav-dot active" onclick="nav(0)" title="عيد الميلاد"></div>
@@ -371,14 +380,38 @@
 
         document.getElementById('pass-field').addEventListener('input', function() {
             let val = this.value.replace(/[^0-9]/g, '');
-            if(val === '1311' || val === '13112025') {
+            let isSagda = (val === '1311' || val === '13112025');
+            let isMother = (val === '58' || val === '0508' || val === '581990' || val === '05081990');
+
+            if(isSagda || isMother) {
                 let err = document.getElementById('error-msg');
                 err.style.color = '#00ff00';
-                err.innerText = 'الباسورد صح.. بس إنتي اللي صح الصح 😉❤️'; 
+                err.innerText = isSagda ? 'الباسورد صح.. بس إنتي اللي صح الصح 😉❤️' : 'نورتي يا ست الكل ✨'; 
                 err.style.opacity = '1';
                 setTimeout(() => {
                     document.getElementById('lock-screen').style.opacity = '0';
-                    setTimeout(() => { document.getElementById('lock-screen').style.display = 'none'; initApp(); }, 600);
+                    setTimeout(() => { 
+                        document.getElementById('lock-screen').style.display = 'none'; 
+                        initApp(); 
+                        
+                        if(isMother) {
+                            let pop = document.getElementById('mother-popup');
+                            pop.style.display = 'flex';
+                            setTimeout(() => { pop.style.opacity = '1'; }, 50);
+                            
+                            let mAud = document.getElementById('mother-audio');
+                            mAud.currentTime = 0;
+                            mAud.play().catch(e => console.log(e));
+                            
+                            setTimeout(() => {
+                                pop.style.opacity = '0';
+                                setTimeout(() => { 
+                                    pop.style.display = 'none'; 
+                                    mAud.pause(); 
+                                }, 800);
+                            }, 5000);
+                        }
+                    }, 600);
                 }, 1000);
             } else if (val.length >= 8) {
                 document.getElementById('error-msg').style.opacity = '1';
@@ -582,11 +615,12 @@
         }
         
         document.getElementById('vault-pass').addEventListener('input', function() {
+            let val = this.value;
             let h = document.getElementById("rel-hours").innerText;
             let m = document.getElementById("rel-mins").innerText;
             let targetPass = h + m;
             
-            if(this.value === targetPass) {
+            if(val === targetPass) {
                 vaultUnlocked = true;
                 let vaultHint = document.getElementById('vault-hint');
                 vaultHint.style.color = '#00ff00';
@@ -616,7 +650,7 @@
                     applyTikTokScroll(document.querySelectorAll('#private-vid-grid video'));
                 }, 1000);
 
-            } else if (this.value.length >= targetPass.length) {
+            } else if (val.length >= targetPass.length) {
                 this.classList.add('shake');
                 setTimeout(() => { this.classList.remove('shake'); this.value = ''; }, 400);
             }
@@ -751,3 +785,4 @@
     </script>
 </body>
 </html>
+
