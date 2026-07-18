@@ -145,7 +145,7 @@
     <div id="lock-screen">
         <h2 style="font-family: 'Poppins'; color: var(--gold); letter-spacing: 3px; margin-bottom: 5px; font-size: 2rem;">SAGDA'S ZONE</h2>
         <p style="color: #666; font-size: 13px; margin-top: 0;">⛔ للجميلات فقط.. ممنوع دخول أي حد غيرها</p>
-        <input type="text" id="pass-field" class="pass-input" placeholder="تاريخ الحكاية 💍" autocomplete="off">
+        <input type="tel" inputmode="numeric" pattern="[0-9]*" id="pass-field" class="pass-input" placeholder="تاريخ الحكاية 💍" autocomplete="off">
         <div id="error-msg" class="error-msg">مش عارفة التاريخ؟! أخص عليكي 😂💔</div>
     </div>
 
@@ -270,7 +270,7 @@
 
             <div id="vault-secret" style="display: none; text-align: center; margin-top: 25px; z-index: 2;">
                 <p id="vault-hint" style="color: #ff4d6d; font-size: 14px; font-weight: bold; margin-bottom: 5px;">الباسورد هو عمر حكايتنا بالساعات والدقايق.. دلوقتي بالظبط ⏳</p>
-                <input type="number" id="vault-pass" class="pass-input" placeholder="****" style="letter-spacing: 5px;">
+                <input type="tel" inputmode="numeric" pattern="[0-9]*" id="vault-pass" class="pass-input" placeholder="****" style="letter-spacing: 5px;">
             </div>
 
             <div id="private-content" style="display: none; width: 100%; max-width: 500px; z-index: 2;">
@@ -324,7 +324,6 @@
             document.title = document.hidden ? "وحشتيني يا سجدة 🥺" : originalTitle;
         });
 
-        // DOM Cache elements for massive performance boost
         let elCdDays, elCdHours, elCdMins, elCdSecs;
         let elRelDays, elRelHours, elRelMins, elRelSecs;
         let elAgeY, elAgeM, elAgeD;
@@ -524,7 +523,6 @@
             });
         }
 
-        // Lazy load video src for massive performance boost
         function applyTikTokScroll(videos) {
             let observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
